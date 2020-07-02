@@ -8,6 +8,8 @@ import tech.pegasys.net.api.model.ImmutableLegacyTransaction;
 import tech.pegasys.net.api.model.LegacyTransaction;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 
+import java.math.BigInteger;
+
 public class LegacyTransactionCreatorService implements LegacyTransactionCreator {
   private final ChainFillerConfiguration configuration;
   private final AccountRepository accountRepository;
@@ -23,9 +25,11 @@ public class LegacyTransactionCreatorService implements LegacyTransactionCreator
   }
 
   @Override
-  public LegacyTransaction create() {
+  public LegacyTransaction create(final BigInteger nonce, final BigInteger gasPrice) {
     final Account recipient = accountRepository.random();
     return ImmutableLegacyTransaction.builder()
+        .nonce(nonce)
+        .gasPrice(gasPrice)
         .recipientAddress(recipient.address())
         .value(
             transactionFuzzer.value(

@@ -25,15 +25,16 @@ public class EIP1559TransactionCreatorService implements EIP1559TransactionCreat
   }
 
   @Override
-  public EIP1559Transaction create() {
+  public EIP1559Transaction create(final BigInteger nonce) {
     final Account recipient = accountRepository.random();
     return ImmutableEIP1559Transaction.builder()
+        .nonce(nonce)
         .recipientAddress(recipient.address())
         .value(
             transactionFuzzer.value(
                 configuration.fuzzTransferValueLowerBoundEth(),
                 configuration.fuzzTransferValueUpperBoundEth()))
-        .gasPremium(BigInteger.valueOf(5678))
+        .gasPremium(BigInteger.valueOf(1000))
         .feeCap(BigInteger.valueOf(999999999))
         .build();
   }

@@ -7,6 +7,7 @@ import tech.pegasys.net.api.CredentialsRepository;
 import tech.pegasys.net.api.EIP1559TransactionCreator;
 import tech.pegasys.net.api.LegacyTransactionCreator;
 import tech.pegasys.net.api.Reporter;
+import tech.pegasys.net.api.TransactionFuzzer;
 import tech.pegasys.net.cli.Options;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 import tech.pegasys.net.core.account.AccountRepositoryFactory;
@@ -14,6 +15,7 @@ import tech.pegasys.net.core.credentials.CredentialsRepositoryFactory;
 import tech.pegasys.net.core.report.ReporterService;
 import tech.pegasys.net.core.tx.EIP1559TransactionCreatorService;
 import tech.pegasys.net.core.tx.LegacyTransactionCreatorService;
+import tech.pegasys.net.core.tx.TransactionFuzzerService;
 
 import javax.inject.Singleton;
 
@@ -43,20 +45,31 @@ public class ChainFillerModule {
   @Provides
   @Singleton
   public static LegacyTransactionCreator legacyTransactionCreator(
-      final AccountRepository accountRepository) {
-    return new LegacyTransactionCreatorService(accountRepository);
+      final ChainFillerConfiguration configuration,
+      final AccountRepository accountRepository,
+      final TransactionFuzzer transactionFuzzer) {
+    return new LegacyTransactionCreatorService(configuration, accountRepository, transactionFuzzer);
   }
 
   @Provides
   @Singleton
   public static EIP1559TransactionCreator eip1559TransactionCreator(
-      final AccountRepository accountRepository) {
-    return new EIP1559TransactionCreatorService(accountRepository);
+      final ChainFillerConfiguration configuration,
+      final AccountRepository accountRepository,
+      final TransactionFuzzer transactionFuzzer) {
+    return new EIP1559TransactionCreatorService(
+        configuration, accountRepository, transactionFuzzer);
   }
 
   @Provides
   @Singleton
   public static Reporter reporter() {
     return new ReporterService();
+  }
+
+  @Provides
+  @Singleton
+  public static TransactionFuzzer transactionFuzzer() {
+    return new TransactionFuzzerService();
   }
 }

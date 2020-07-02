@@ -20,6 +20,8 @@
 --recipient-addresses=0xfe3b557e8fb62b89f4916b721be55ceb828dbd73,0x627306090abaB3A6e1400e9345bC60c78a8BEf57
 --num-transactions=100 \
 --eip-1559-tx-weight=0.75 \
---num-threads=8
+--num-threads=8 \
+--fuzz-transfer-value-lower-bound-eth=0.42 \
+--fuzz-transfer-value-upper-bound-eth=8.67 
 ```
 

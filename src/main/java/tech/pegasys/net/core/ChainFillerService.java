@@ -54,12 +54,7 @@ public class ChainFillerService implements ChainFiller {
         process();
       }
       System.out.println("chain-filler execution completed");
-      System.out.printf("totalTransactionsSubmitted: %d\n", reporter.totalTransactionsSubmitted());
-      System.out.printf(
-          "totalLegacyTransactionsSubmitted: %d\n", reporter.totalLegacyTransactionsSubmitted());
-      System.out.printf(
-          "totalEIP1559TransactionsSubmitted: %d\n", reporter.totalEIP1559TransactionsSubmitted());
-
+      System.out.println(reporter.report());
     } catch (final Exception e) {
       System.err.printf("chain-filler error occurred: %s\n", e.getMessage());
     }

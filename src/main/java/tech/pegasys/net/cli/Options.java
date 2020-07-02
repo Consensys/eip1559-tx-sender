@@ -64,6 +64,24 @@ public class Options {
           "Repeat the process every n seconds, 0 means no repeat. (default: ${DEFAULT-VALUE})")
   private Integer repeatEveryNSeconds = 0;
 
+  @Option(
+      names = {"--fuzz-transfer-value-lower-bound-eth"},
+      paramLabel = "<double>",
+      arity = "1",
+      description = "Lower bound for value transfer fuzzing in ETH. (default: ${DEFAULT-VALUE})")
+  private Double fuzzTransferValueLowerBoundEth = 1.1;
+
+  @Option(
+      names = {"--fuzz-transfer-value-upper-bound-eth"},
+      paramLabel = "<double>",
+      arity = "1",
+      description = "Upper bound for value transfer fuzzing in ETH. (default: ${DEFAULT-VALUE})")
+  private Double fuzzTransferValueUpperBoundEth = 5.3;
+
+  public static Options getInstance() {
+    return instance;
+  }
+
   public ChainFillerConfiguration toTxSenderConfiguration() {
     return ImmutableChainFillerConfiguration.builder()
         .addAllRpcEndpoints(rpcEndpoints)
@@ -73,10 +91,8 @@ public class Options {
         .numTransactions(numTransactions)
         .eip1559TxWeight(eip1559TxWeight)
         .repeatEveryNSeconds(repeatEveryNSeconds)
+        .fuzzTransferValueLowerBoundEth(fuzzTransferValueLowerBoundEth)
+        .fuzzTransferValueUpperBoundEth(fuzzTransferValueUpperBoundEth)
         .build();
-  }
-
-  public static Options getInstance() {
-    return instance;
   }
 }

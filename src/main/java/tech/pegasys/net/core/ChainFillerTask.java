@@ -73,7 +73,6 @@ public class ChainFillerTask implements Runnable {
           chainFiller
               .legacyTransactionCreator()
               .create(BigInteger.valueOf(nonce.getAndIncrement()), initialGasPrice);
-      System.out.printf("%s %s\n", taskId, legacyTransaction.toString());
       final byte[] signedMessage = TransactionSigner.sign(legacyTransaction, credentials);
       web3.ethSendRawTransaction(Numeric.toHexString(signedMessage)).send();
       chainFiller.reporter().incLegacyTransactions();
@@ -89,7 +88,6 @@ public class ChainFillerTask implements Runnable {
           chainFiller
               .eip1559TransactionCreator()
               .create(BigInteger.valueOf(nonce.getAndIncrement()));
-      System.out.printf("%s %s\n", taskId, eip1559Transaction.toString());
       final byte[] signedMessage = TransactionSigner.sign(eip1559Transaction, credentials);
       web3.ethSendRawTransaction(Numeric.toHexString(signedMessage)).send();
       chainFiller.reporter().incEIP1559Transactions();

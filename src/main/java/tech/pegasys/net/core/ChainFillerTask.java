@@ -23,6 +23,7 @@ public class ChainFillerTask implements Runnable {
   private final String accountPrivateKey;
   private final int numTransactionsLegacy;
   private final int numTransactionsEIP1559;
+  private final int numSmartContracts;
   private final Web3j web3;
   private AtomicLong nonce;
   private BigInteger initialGasPrice;
@@ -32,12 +33,14 @@ public class ChainFillerTask implements Runnable {
       final String rpcEndpoint,
       final String accountPrivateKey,
       final int numTransactionsLegacy,
-      final int numTransactionsEIP1559) {
+      final int numTransactionsEIP1559,
+      final int numSmartContracts) {
     this.chainFiller = chainFiller;
     this.rpcEndpoint = rpcEndpoint;
     this.accountPrivateKey = accountPrivateKey;
     this.numTransactionsLegacy = numTransactionsLegacy;
     this.numTransactionsEIP1559 = numTransactionsEIP1559;
+    this.numSmartContracts = numSmartContracts;
     this.taskId =
         String.format("[%s - %s]", rpcEndpoint, EthereumUtils.censorPrivateKey(accountPrivateKey));
     this.credentials =
@@ -64,6 +67,7 @@ public class ChainFillerTask implements Runnable {
     System.out.printf("%s task started\n", taskId);
     IntStream.range(0, numTransactionsLegacy).forEach(__ -> sendLegacyTransaction());
     IntStream.range(0, numTransactionsEIP1559).forEach(__ -> sendEIP1559Transaction());
+    IntStream.range(0, numSmartContracts).forEach(__ -> deploySmartContract());
     System.out.printf("%s task completed\n", taskId);
   }
 
@@ -94,6 +98,25 @@ public class ChainFillerTask implements Runnable {
     } catch (final Exception e) {
       System.err.printf("%s error sending eip1559 transaction: %s\n", taskId, e.getMessage());
       chainFiller.reporter().incEIP1559TransactionsError();
+    }
+  }
+
+  private void deploySmartContract() {
+    try {
+      final LegacyTransaction contractDeploymentTransaction =
+          chainFiller
+              .legacyTransactionCreator()
+              .create(
+                  BigInteger.valueOf(nonce.getAndIncrement()),
+                  initialGasPrice,
+                  chainFiller.contractRepository().random().code());
+      final byte[] signedMessage =
+          TransactionSigner.sign(contractDeploymentTransaction, credentials);
+      web3.ethSendRawTransaction(Numeric.toHexString(signedMessage)).send();
+      chainFiller.reporter().incTotalContractsDeployed();
+    } catch (final Exception e) {
+      System.err.printf("%s error deploying contract: %s\n", taskId, e.getMessage());
+      chainFiller.reporter().incTotalContractsDeploymentsError();
     }
   }
 }

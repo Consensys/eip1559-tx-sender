@@ -9,6 +9,7 @@ import tech.pegasys.net.api.model.LegacyTransaction;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 
 import java.math.BigInteger;
+import java.util.Optional;
 
 public class LegacyTransactionCreatorService implements LegacyTransactionCreator {
   private final ChainFillerConfiguration configuration;
@@ -35,6 +36,22 @@ public class LegacyTransactionCreatorService implements LegacyTransactionCreator
             transactionFuzzer.value(
                 configuration.fuzzTransferValueLowerBoundEth(),
                 configuration.fuzzTransferValueUpperBoundEth()))
+        .bytecode(Optional.empty())
+        .build();
+  }
+
+  @Override
+  public LegacyTransaction create(
+      final BigInteger nonce, final BigInteger gasPrice, final String bytecode) {
+    return ImmutableLegacyTransaction.builder()
+        .nonce(nonce)
+        .gasPrice(gasPrice)
+        .recipientAddress("")
+        .value(
+            transactionFuzzer.value(
+                configuration.fuzzTransferValueLowerBoundEth(),
+                configuration.fuzzTransferValueUpperBoundEth()))
+        .bytecode(Optional.ofNullable(bytecode))
         .build();
   }
 }

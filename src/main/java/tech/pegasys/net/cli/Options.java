@@ -50,6 +50,14 @@ public class Options {
   private Integer numTransactions = 10;
 
   @Option(
+      names = {"--num-contracts"},
+      paramLabel = "<int>",
+      arity = "1",
+      description =
+          "Number of smart contracts to deploy for each account on each RPC endpoint. (default: ${DEFAULT-VALUE})")
+  private Integer numSmartContracts = 0;
+
+  @Option(
       names = {"--eip-1559-tx-weight"},
       paramLabel = "<double>",
       arity = "1",
@@ -89,6 +97,7 @@ public class Options {
         .addAllRecipientAddresses(recipientAddresses)
         .numThreads(numThreads)
         .numTransactions(numTransactions)
+        .numSmartContracts(numSmartContracts)
         .eip1559TxWeight(eip1559TxWeight)
         .repeatEveryNSeconds(repeatEveryNSeconds)
         .fuzzTransferValueLowerBoundEth(fuzzTransferValueLowerBoundEth)

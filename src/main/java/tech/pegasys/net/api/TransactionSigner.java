@@ -11,17 +11,29 @@ import java.math.BigInteger;
 
 public class TransactionSigner {
   private static final BigInteger DEFAULT_GAS_LIMIT = BigInteger.valueOf(30000);
+  private static final BigInteger DEFAULT_CONTRACT_GAS_LIMIT = BigInteger.valueOf(8000000);
 
   public static byte[] sign(
       final LegacyTransaction legacyTransaction, final Credentials credentials) {
-    return sign(
-        RawTransaction.createEtherTransaction(
-            legacyTransaction.nonce(),
-            legacyTransaction.gasPrice(),
-            DEFAULT_GAS_LIMIT,
-            legacyTransaction.recipientAddress(),
-            Convert.toWei(legacyTransaction.value(), Convert.Unit.ETHER).toBigInteger()),
-        credentials);
+    final RawTransaction rawTransaction;
+    if (legacyTransaction.bytecode().isPresent()) {
+      rawTransaction =
+          RawTransaction.createContractTransaction(
+              legacyTransaction.nonce(),
+              legacyTransaction.gasPrice(),
+              DEFAULT_CONTRACT_GAS_LIMIT,
+              Convert.toWei(legacyTransaction.value(), Convert.Unit.ETHER).toBigInteger(),
+              legacyTransaction.bytecode().get());
+    } else {
+      rawTransaction =
+          RawTransaction.createEtherTransaction(
+              legacyTransaction.nonce(),
+              legacyTransaction.gasPrice(),
+              DEFAULT_GAS_LIMIT,
+              legacyTransaction.recipientAddress(),
+              Convert.toWei(legacyTransaction.value(), Convert.Unit.ETHER).toBigInteger());
+    }
+    return sign(rawTransaction, credentials);
   }
 
   public static byte[] sign(

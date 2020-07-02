@@ -12,6 +12,8 @@ public class ReporterService implements Reporter {
   private final AtomicLong totalLegacyTransactionsError;
   private final AtomicLong totalEIP1559TransactionsSubmitted;
   private final AtomicLong totalEIP1559TransactionsError;
+  private final AtomicLong totalContractsDeployed;
+  private final AtomicLong totalContractsDeploymentsError;
 
   public ReporterService() {
     this.totalTransactionsSubmitted = new AtomicLong(0);
@@ -20,6 +22,8 @@ public class ReporterService implements Reporter {
     this.totalLegacyTransactionsError = new AtomicLong(0);
     this.totalEIP1559TransactionsError = new AtomicLong(0);
     this.totalTransactionsError = new AtomicLong(0);
+    this.totalContractsDeployed = new AtomicLong(0);
+    this.totalContractsDeploymentsError = new AtomicLong(0);
   }
 
   @Override
@@ -87,6 +91,26 @@ public class ReporterService implements Reporter {
   }
 
   @Override
+  public long totalContractsDeployed() {
+    return totalContractsDeployed.get();
+  }
+
+  @Override
+  public long totalContractsDeploymentsError() {
+    return totalContractsDeploymentsError.get();
+  }
+
+  @Override
+  public void incTotalContractsDeployed() {
+    totalContractsDeployed.incrementAndGet();
+  }
+
+  @Override
+  public void incTotalContractsDeploymentsError() {
+    totalContractsDeploymentsError.incrementAndGet();
+  }
+
+  @Override
   public String report() {
     return new JSONObject()
         .put("totalTransactionsSuccess", totalTransactionsSubmitted())
@@ -95,6 +119,8 @@ public class ReporterService implements Reporter {
         .put("legacyTransactionsError", totalLegacyTransactionsError())
         .put("eip1559TransactionsSuccess", totalEIP1559TransactionsSubmitted())
         .put("eip1559TransactionsError", totalEIP1559TransactionsError())
+        .put("contractDeploymentsSuccess", totalContractsDeployed())
+        .put("contractDeploymentsError", totalContractsDeploymentsError())
         .toString();
   }
 }

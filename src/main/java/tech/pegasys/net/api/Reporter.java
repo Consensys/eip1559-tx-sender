@@ -26,5 +26,13 @@ public interface Reporter {
 
   void incEIP1559TransactionsError();
 
+  long totalContractsDeployed();
+
+  long totalContractsDeploymentsError();
+
+  void incTotalContractsDeployed();
+
+  void incTotalContractsDeploymentsError();
+
   String report();
 }

@@ -2,6 +2,7 @@ package tech.pegasys.net.core;
 
 import tech.pegasys.net.api.AccountRepository;
 import tech.pegasys.net.api.ChainFiller;
+import tech.pegasys.net.api.ContractRepository;
 import tech.pegasys.net.api.CredentialsRepository;
 import tech.pegasys.net.api.EIP1559TransactionCreator;
 import tech.pegasys.net.api.LegacyTransactionCreator;
@@ -18,6 +19,7 @@ public class ChainFillerService implements ChainFiller {
   private final ChainFillerConfiguration configuration;
   private final CredentialsRepository credentialsRepository;
   private final AccountRepository accountRepository;
+  private final ContractRepository contractRepository;
   private final LegacyTransactionCreator legacyTransactionCreator;
   private final EIP1559TransactionCreator eip1559TransactionCreator;
   private final Reporter reporter;
@@ -27,12 +29,14 @@ public class ChainFillerService implements ChainFiller {
       final ChainFillerConfiguration configuration,
       final CredentialsRepository credentialsRepository,
       final AccountRepository accountRepository,
+      final ContractRepository contractRepository,
       final LegacyTransactionCreator legacyTransactionCreator,
       final EIP1559TransactionCreator eip1559TransactionCreator,
       final Reporter reporter) {
     this.configuration = configuration;
     this.credentialsRepository = credentialsRepository;
     this.accountRepository = accountRepository;
+    this.contractRepository = contractRepository;
     this.legacyTransactionCreator = legacyTransactionCreator;
     this.eip1559TransactionCreator = eip1559TransactionCreator;
     this.reporter = reporter;
@@ -81,7 +85,8 @@ public class ChainFillerService implements ChainFiller {
                                       rpcEndpoint,
                                       accountPrivateKey,
                                       legacyTxs,
-                                      eip1559Txs))));
+                                      eip1559Txs,
+                                      configuration.numSmartContracts()))));
       executorService.shutdown();
       executorService.awaitTermination(1, TimeUnit.DAYS);
     } catch (final Exception e) {
@@ -97,6 +102,11 @@ public class ChainFillerService implements ChainFiller {
   @Override
   public CredentialsRepository credentialsRepository() {
     return credentialsRepository;
+  }
+
+  @Override
+  public ContractRepository contractRepository() {
+    return contractRepository;
   }
 
   @Override

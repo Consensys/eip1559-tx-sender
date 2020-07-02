@@ -7,4 +7,6 @@ import java.math.BigInteger;
 public interface LegacyTransactionCreator {
 
   LegacyTransaction create(BigInteger nonce, BigInteger gasPrice);
+
+  LegacyTransaction create(BigInteger nonce, BigInteger gasPrice, String bytecode);
 }

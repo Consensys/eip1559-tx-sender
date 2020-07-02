@@ -8,6 +8,8 @@ public interface ChainFiller {
 
   CredentialsRepository credentialsRepository();
 
+  ContractRepository contractRepository();
+
   LegacyTransactionCreator legacyTransactionCreator();
 
   EIP1559TransactionCreator eip1559TransactionCreator();

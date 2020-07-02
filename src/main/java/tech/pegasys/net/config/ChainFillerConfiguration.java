@@ -18,6 +18,8 @@ public interface ChainFillerConfiguration {
 
   int numTransactions();
 
+  int numSmartContracts();
+
   double eip1559TxWeight();
 
   double fuzzTransferValueLowerBoundEth();

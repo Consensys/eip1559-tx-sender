@@ -3,6 +3,7 @@ package tech.pegasys.net.core.dagger;
 import dagger.Module;
 import dagger.Provides;
 import tech.pegasys.net.api.AccountRepository;
+import tech.pegasys.net.api.ContractRepository;
 import tech.pegasys.net.api.CredentialsRepository;
 import tech.pegasys.net.api.EIP1559TransactionCreator;
 import tech.pegasys.net.api.LegacyTransactionCreator;
@@ -11,6 +12,7 @@ import tech.pegasys.net.api.TransactionFuzzer;
 import tech.pegasys.net.cli.Options;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 import tech.pegasys.net.core.account.AccountRepositoryFactory;
+import tech.pegasys.net.core.contracts.ContractRepositoryFactory;
 import tech.pegasys.net.core.credentials.CredentialsRepositoryFactory;
 import tech.pegasys.net.core.report.ReporterService;
 import tech.pegasys.net.core.tx.EIP1559TransactionCreatorService;
@@ -40,6 +42,12 @@ public class ChainFillerModule {
   @Singleton
   public static AccountRepository accountRepository(final ChainFillerConfiguration configuration) {
     return AccountRepositoryFactory.inMemoryAccountRepository(configuration.recipientAddresses());
+  }
+
+  @Provides
+  @Singleton
+  public static ContractRepository contractRepository() {
+    return ContractRepositoryFactory.inMemoryContractRepository();
   }
 
   @Provides

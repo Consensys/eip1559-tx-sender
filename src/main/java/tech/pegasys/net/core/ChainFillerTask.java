@@ -60,7 +60,7 @@ public class ChainFillerTask implements Runnable {
               legacyTransaction.recipientAddress(),
               legacyTransaction.value(),
               ETHER)
-          .send();
+          .sendAsync();
       chainFiller.reporter().incLegacyTransactions();
     } catch (final Exception e) {
       System.err.printf("%s error sending legacy transaction: %s\n", taskId, e.getMessage());
@@ -81,7 +81,7 @@ public class ChainFillerTask implements Runnable {
               BigInteger.valueOf(30000),
               eip1559Transaction.gasPremium(),
               eip1559Transaction.feeCap())
-          .send();
+          .sendAsync();
       chainFiller.reporter().incEIP1559Transactions();
     } catch (final Exception e) {
       System.err.printf("%s error sending eip1559 transaction: %s\n", taskId, e.getMessage());

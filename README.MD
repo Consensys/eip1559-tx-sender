@@ -10,31 +10,7 @@
 ```shell script
 ./build/install/eip1559-tx-sender/bin/eip1559-tx-sender --help
 ```
-
-```
-Usage: tx-sender [-hV] [--eip-1559-tx-weight=<double>] [--num-threads=<int>]
-                 [--num-transactions=<int>] [--repeat-every-n-seconds=<int>]
-                 [--account-private-keys[=<privateKey[,<privateKey...]...]]...
-                 [--rpc-endpoints[=<http://host:port>[,<http://host:
-                 port>...]...]]...
-Runs the tx-sender tool.
-      --account-private-keys[=<privateKey[,<privateKey...]...]
-                            Comma separated Ethereum account private keys.
-      --eip-1559-tx-weight=<double>
-                            Percentage of EIP-1559 transactions. (default: 0.5)
-  -h, --help                Show this help message and exit.
-      --num-threads=<int>   Number of threads. (default: 12)
-      --num-transactions=<int>
-                            Number of transactions sent for each account on
-                              each RPC endpoint. (default: 10)
-      --repeat-every-n-seconds=<int>
-                            Repeat the process every n seconds, 0 means no
-                              repeat. (default: 0)
-      --rpc-endpoints[=<http://host:port>[,<http://host:port>...]...]
-                            Comma separated RPC endpoints of Ethereum clients
-                              nodes.
-  -V, --version             Print version information and exit.
-```
+![Help](help.png)
 #### Sample
 
 ```shell script

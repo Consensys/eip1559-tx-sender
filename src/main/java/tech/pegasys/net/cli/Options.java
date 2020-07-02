@@ -1,8 +1,8 @@
 package tech.pegasys.net.cli;
 
 import picocli.CommandLine.Option;
-import tech.pegasys.net.config.ImmutableTxSenderConfiguration;
-import tech.pegasys.net.config.TxSenderConfiguration;
+import tech.pegasys.net.config.ChainFillerConfiguration;
+import tech.pegasys.net.config.ImmutableChainFillerConfiguration;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,11 +20,19 @@ public class Options {
 
   @Option(
       names = {"--account-private-keys"},
-      paramLabel = "<privateKey",
+      paramLabel = "<privateKey>",
       description = "Comma separated Ethereum account private keys. ",
       split = ",",
       arity = "0..*")
   private List<String> accountPrivateKeys;
+
+  @Option(
+      names = {"--recipient-addresses"},
+      paramLabel = "<address>",
+      description = "Comma separated Ethereum account addresses. ",
+      split = ",",
+      arity = "0..*")
+  private List<String> recipientAddresses;
 
   @Option(
       names = {"--num-threads"},
@@ -56,10 +64,11 @@ public class Options {
           "Repeat the process every n seconds, 0 means no repeat. (default: ${DEFAULT-VALUE})")
   private Integer repeatEveryNSeconds = 0;
 
-  public TxSenderConfiguration toTxSenderConfiguration() {
-    return ImmutableTxSenderConfiguration.builder()
+  public ChainFillerConfiguration toTxSenderConfiguration() {
+    return ImmutableChainFillerConfiguration.builder()
         .addAllRpcEndpoints(rpcEndpoints)
         .addAllAccountPrivateKeys(accountPrivateKeys)
+        .addAllRecipientAddresses(recipientAddresses)
         .numThreads(numThreads)
         .numTransactions(numTransactions)
         .eip1559TxWeight(eip1559TxWeight)

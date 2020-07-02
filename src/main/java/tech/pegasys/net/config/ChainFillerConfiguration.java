@@ -5,7 +5,7 @@ import org.immutables.value.Value;
 import java.util.List;
 
 @Value.Immutable
-public interface TxSenderConfiguration {
+public interface ChainFillerConfiguration {
   int numThreads();
 
   int repeatEveryNSeconds();
@@ -13,6 +13,8 @@ public interface TxSenderConfiguration {
   List<String> rpcEndpoints();
 
   List<String> accountPrivateKeys();
+
+  List<String> recipientAddresses();
 
   int numTransactions();
 

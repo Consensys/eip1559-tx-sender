@@ -27,4 +27,6 @@ public interface ChainFillerConfiguration {
   double fuzzTransferValueUpperBoundEth();
 
   String contractDir();
+
+  boolean continuous();
 }

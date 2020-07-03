@@ -94,6 +94,13 @@ public class Options {
           "Location of contracts root directory used to provision contract repository. (default: ${DEFAULT-VALUE})")
   private String contractDir = "";
 
+  @Option(
+      names = {"--continuous"},
+      paramLabel = "<bool>",
+      arity = "1",
+      description = "Whether or not continuous mode is enabled. (default: ${DEFAULT-VALUE})")
+  private Boolean continuous = false;
+
   public static Options getInstance() {
     return instance;
   }
@@ -111,6 +118,7 @@ public class Options {
         .fuzzTransferValueLowerBoundEth(fuzzTransferValueLowerBoundEth)
         .fuzzTransferValueUpperBoundEth(fuzzTransferValueUpperBoundEth)
         .contractDir(contractDir)
+        .continuous(continuous)
         .build();
   }
 }

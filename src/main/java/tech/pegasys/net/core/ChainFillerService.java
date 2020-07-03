@@ -47,7 +47,13 @@ public class ChainFillerService implements ChainFiller {
   public void fill() {
     try {
       Logger.info("starting chain-filler");
-      if (configuration.repeatEveryNSeconds() > 0) {
+      if (configuration.continuous()) {
+        ImmutableRxChainFiller.builder()
+            .chainFiller(this)
+            .configuration(configuration)
+            .build()
+            .start();
+      } else if (configuration.repeatEveryNSeconds() > 0) {
         Logger.info(
             "scheduling chain-filler every {} seconds\n", configuration.repeatEveryNSeconds());
         final ScheduledFuture<?> scheduledFuture =

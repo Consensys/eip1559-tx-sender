@@ -23,6 +23,7 @@
 --eip-1559-tx-weight=0.75 \
 --num-threads=8 \
 --fuzz-transfer-value-lower-bound-eth=0.42 \
---fuzz-transfer-value-upper-bound-eth=8.67 
+--fuzz-transfer-value-upper-bound-eth=8.67 \
+--contract-dir=/etc/contracts
 ```
 

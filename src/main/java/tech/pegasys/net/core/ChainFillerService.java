@@ -1,5 +1,6 @@
 package tech.pegasys.net.core;
 
+import org.tinylog.Logger;
 import tech.pegasys.net.api.AccountRepository;
 import tech.pegasys.net.api.ChainFiller;
 import tech.pegasys.net.api.ContractRepository;
@@ -45,10 +46,10 @@ public class ChainFillerService implements ChainFiller {
   @Override
   public void fill() {
     try {
-      System.out.printf("starting chain-filler with configuration: %s\n", configuration.toString());
+      Logger.info("starting chain-filler");
       if (configuration.repeatEveryNSeconds() > 0) {
-        System.out.printf(
-            "scheduling chain-filler every %d seconds\n", configuration.repeatEveryNSeconds());
+        Logger.info(
+            "scheduling chain-filler every {} seconds\n", configuration.repeatEveryNSeconds());
         final ScheduledFuture<?> scheduledFuture =
             Executors.newScheduledThreadPool(1)
                 .scheduleAtFixedRate(
@@ -57,10 +58,10 @@ public class ChainFillerService implements ChainFiller {
       } else {
         process();
       }
-      System.out.println("chain-filler execution completed");
-      System.out.println(reporter.report());
+      Logger.info("chain-filler execution completed");
+      // System.out.println(reporter.report());
     } catch (final Exception e) {
-      System.err.printf("chain-filler error occurred: %s\n", e.getMessage());
+      Logger.error(e, "chain-filler error occurred");
     }
   }
 
@@ -90,7 +91,7 @@ public class ChainFillerService implements ChainFiller {
       executorService.shutdown();
       executorService.awaitTermination(1, TimeUnit.DAYS);
     } catch (final Exception e) {
-      System.err.printf("chain-filler error occurred: %s\n", e.getMessage());
+      Logger.error(e, "chain-filler error occurred");
     }
   }
 

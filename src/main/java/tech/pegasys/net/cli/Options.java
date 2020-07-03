@@ -86,6 +86,14 @@ public class Options {
       description = "Upper bound for value transfer fuzzing in ETH. (default: ${DEFAULT-VALUE})")
   private Double fuzzTransferValueUpperBoundEth = 5.3;
 
+  @Option(
+      names = {"--contract-dir"},
+      paramLabel = "<path>",
+      arity = "1",
+      description =
+          "Location of contracts root directory used to provision contract repository. (default: ${DEFAULT-VALUE})")
+  private String contractDir = "";
+
   public static Options getInstance() {
     return instance;
   }
@@ -102,6 +110,7 @@ public class Options {
         .repeatEveryNSeconds(repeatEveryNSeconds)
         .fuzzTransferValueLowerBoundEth(fuzzTransferValueLowerBoundEth)
         .fuzzTransferValueUpperBoundEth(fuzzTransferValueUpperBoundEth)
+        .contractDir(contractDir)
         .build();
   }
 }

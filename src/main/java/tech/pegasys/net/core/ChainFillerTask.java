@@ -1,5 +1,6 @@
 package tech.pegasys.net.core;
 
+import org.tinylog.Logger;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -56,19 +57,32 @@ public class ChainFillerTask implements Runnable {
                   .longValue());
       this.initialGasPrice = web3.ethGasPrice().send().getGasPrice();
     } catch (Exception e) {
-      System.err.printf(
-          "%s error setting initial parameters (nonce, gasPrice) : %s\n", taskId, e.getMessage());
+      Logger.error(e, "error setting initial parameters (nonce, gasPrice)");
       this.initialGasPrice = BigInteger.ZERO;
+      this.nonce = new AtomicLong(0);
     }
   }
 
   @Override
   public void run() {
-    System.out.printf("%s task started\n", taskId);
+    Logger.debug(
+        "sending {} legacy transactions on node {} with account {}",
+        numTransactionsLegacy,
+        rpcEndpoint,
+        credentials.getAddress());
     IntStream.range(0, numTransactionsLegacy).forEach(__ -> sendLegacyTransaction());
+    Logger.debug(
+        "sending {} eip-1559 transactions on node {} with account {}",
+        numTransactionsEIP1559,
+        rpcEndpoint,
+        credentials.getAddress());
     IntStream.range(0, numTransactionsEIP1559).forEach(__ -> sendEIP1559Transaction());
+    Logger.debug(
+        "deploying {} contracts on node {} with account {}",
+        numSmartContracts,
+        rpcEndpoint,
+        credentials.getAddress());
     IntStream.range(0, numSmartContracts).forEach(__ -> deploySmartContract());
-    System.out.printf("%s task completed\n", taskId);
   }
 
   private void sendLegacyTransaction() {
@@ -81,7 +95,7 @@ public class ChainFillerTask implements Runnable {
       web3.ethSendRawTransaction(Numeric.toHexString(signedMessage)).send();
       chainFiller.reporter().incLegacyTransactions();
     } catch (final Exception e) {
-      System.err.printf("%s error sending legacy transaction: %s\n", taskId, e.getMessage());
+      Logger.error(e, "error sending legacy transaction");
       chainFiller.reporter().incLegacyTransactionsError();
     }
   }
@@ -96,7 +110,7 @@ public class ChainFillerTask implements Runnable {
       web3.ethSendRawTransaction(Numeric.toHexString(signedMessage)).send();
       chainFiller.reporter().incEIP1559Transactions();
     } catch (final Exception e) {
-      System.err.printf("%s error sending eip1559 transaction: %s\n", taskId, e.getMessage());
+      Logger.error(e, "error sending eip1559 transaction");
       chainFiller.reporter().incEIP1559TransactionsError();
     }
   }
@@ -115,7 +129,7 @@ public class ChainFillerTask implements Runnable {
       web3.ethSendRawTransaction(Numeric.toHexString(signedMessage)).send();
       chainFiller.reporter().incTotalContractsDeployed();
     } catch (final Exception e) {
-      System.err.printf("%s error deploying contract: %s\n", taskId, e.getMessage());
+      Logger.error(e, "error deploying contract transaction");
       chainFiller.reporter().incTotalContractsDeploymentsError();
     }
   }

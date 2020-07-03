@@ -10,7 +10,7 @@
 ```shell script
 ./build/install/chain-filler/bin/chain-filler --help
 ```
-![Help](help.png)
+![Help](help-screenshot.png)
 #### Sample
 
 ```shell script

@@ -108,7 +108,7 @@ public class ChainFillerTask implements Runnable {
               .legacyTransactionCreator()
               .create(
                   BigInteger.valueOf(nonce.getAndIncrement()),
-                  initialGasPrice,
+                  BigInteger.valueOf(2000001529),
                   chainFiller.contractRepository().random().code());
       final byte[] signedMessage =
           TransactionSigner.sign(contractDeploymentTransaction, credentials);

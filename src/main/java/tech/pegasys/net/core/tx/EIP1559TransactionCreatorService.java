@@ -34,7 +34,7 @@ public class EIP1559TransactionCreatorService implements EIP1559TransactionCreat
             transactionFuzzer.value(
                 configuration.fuzzTransferValueLowerBoundEth(),
                 configuration.fuzzTransferValueUpperBoundEth()))
-        .gasPremium(BigInteger.valueOf(1000))
+        .gasPremium(BigInteger.valueOf(2000001529))
         .feeCap(BigInteger.valueOf(999999999))
         .build();
   }

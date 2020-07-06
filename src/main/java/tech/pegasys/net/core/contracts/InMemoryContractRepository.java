@@ -1,8 +1,8 @@
 package tech.pegasys.net.core.contracts;
 
 import org.immutables.value.Value;
-import tech.pegasys.net.api.service.ContractRepository;
 import tech.pegasys.net.api.model.Contract;
+import tech.pegasys.net.api.service.ContractRepository;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;

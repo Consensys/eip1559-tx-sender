@@ -33,6 +33,7 @@ dependencies {
     implementation 'org.tinylog:tinylog-impl:2.1.2'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
     implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'io.nats:jnats:2.6.8'
 
 
     annotationProcessor 'com.google.dagger:dagger-compiler:2.28.1'

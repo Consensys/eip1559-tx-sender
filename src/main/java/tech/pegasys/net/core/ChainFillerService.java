@@ -9,10 +9,12 @@ import tech.pegasys.net.api.service.EIP1559TransactionCreator;
 import tech.pegasys.net.api.service.LegacyTransactionCreator;
 import tech.pegasys.net.api.service.Reporter;
 import tech.pegasys.net.config.ChainFillerConfiguration;
+import tech.pegasys.net.fuzzer.NatsFuzzer;
 
 import javax.inject.Inject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -47,22 +49,41 @@ public class ChainFillerService implements ChainFiller {
   public void fill() {
     try {
       Logger.info("starting chain-filler");
-      if (configuration.continuous()) {
-        ImmutableRxChainFiller.builder()
-            .chainFiller(this)
-            .configuration(configuration)
-            .build()
-            .start();
-      } else if (configuration.repeatEveryNSeconds() > 0) {
-        Logger.info(
-            "scheduling chain-filler every {} seconds\n", configuration.repeatEveryNSeconds());
-        final ScheduledFuture<?> scheduledFuture =
-            Executors.newScheduledThreadPool(1)
-                .scheduleAtFixedRate(
-                    this::process, 0, configuration.repeatEveryNSeconds(), TimeUnit.SECONDS);
-        scheduledFuture.get(1, TimeUnit.DAYS);
-      } else {
-        process();
+      switch (configuration.fillerMode()) {
+        case SCHEDULER:
+          Logger.info(
+              "scheduling chain-filler every {} seconds\n", configuration.repeatEveryNSeconds());
+          final ScheduledFuture<?> scheduledFuture =
+              Executors.newScheduledThreadPool(1)
+                  .scheduleAtFixedRate(
+                      this::process, 0, configuration.repeatEveryNSeconds(), TimeUnit.SECONDS);
+          scheduledFuture.get(1, TimeUnit.DAYS);
+          break;
+        case CONTINUOUS:
+          ImmutableRxChainFiller.builder()
+              .chainFiller(this)
+              .configuration(configuration)
+              .build()
+              .start();
+          break;
+        case EXTERNAL_FUZZER_NATS:
+          final Future<Boolean> natsFuzzerJob =
+              new NatsFuzzer(
+                      Executors.newSingleThreadExecutor(),
+                      this,
+                      configuration.natsURL(),
+                      configuration.natsAsyncConnection(),
+                      configuration.natsFuzzerTopicTransactions())
+                  .start();
+          while (!natsFuzzerJob.isDone()) {
+            Thread.sleep(1000);
+          }
+          Logger.info("nats fuzzer job completed with status: {}", natsFuzzerJob.get());
+          break;
+        case ONESHOT:
+        default:
+          process();
+          break;
       }
       Logger.info("chain-filler execution completed");
       // System.out.println(reporter.report());

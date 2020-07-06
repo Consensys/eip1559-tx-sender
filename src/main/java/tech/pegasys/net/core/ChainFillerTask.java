@@ -6,10 +6,10 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
-import tech.pegasys.net.api.service.ChainFiller;
-import tech.pegasys.net.api.service.TransactionSigner;
 import tech.pegasys.net.api.model.EIP1559Transaction;
 import tech.pegasys.net.api.model.LegacyTransaction;
+import tech.pegasys.net.api.service.ChainFiller;
+import tech.pegasys.net.api.service.TransactionSigner;
 import tech.pegasys.net.util.EthereumUtils;
 
 import java.math.BigInteger;

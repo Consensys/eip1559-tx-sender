@@ -30,6 +30,7 @@ import org.immutables.value.Generated;
 @CheckReturnValue
 public final class ImmutableChainFillerConfiguration
     implements ChainFillerConfiguration {
+  private final FillerMode fillerMode;
   private final int numThreads;
   private final int repeatEveryNSeconds;
   private final ImmutableList<String> rpcEndpoints;
@@ -41,9 +42,12 @@ public final class ImmutableChainFillerConfiguration
   private final double fuzzTransferValueLowerBoundEth;
   private final double fuzzTransferValueUpperBoundEth;
   private final String contractDir;
-  private final boolean continuous;
+  private final String natsURL;
+  private final boolean natsAsyncConnection;
+  private final String natsFuzzerTopicTransactions;
 
   private ImmutableChainFillerConfiguration(
+      FillerMode fillerMode,
       int numThreads,
       int repeatEveryNSeconds,
       ImmutableList<String> rpcEndpoints,
@@ -55,7 +59,10 @@ public final class ImmutableChainFillerConfiguration
       double fuzzTransferValueLowerBoundEth,
       double fuzzTransferValueUpperBoundEth,
       String contractDir,
-      boolean continuous) {
+      String natsURL,
+      boolean natsAsyncConnection,
+      String natsFuzzerTopicTransactions) {
+    this.fillerMode = fillerMode;
     this.numThreads = numThreads;
     this.repeatEveryNSeconds = repeatEveryNSeconds;
     this.rpcEndpoints = rpcEndpoints;
@@ -67,7 +74,17 @@ public final class ImmutableChainFillerConfiguration
     this.fuzzTransferValueLowerBoundEth = fuzzTransferValueLowerBoundEth;
     this.fuzzTransferValueUpperBoundEth = fuzzTransferValueUpperBoundEth;
     this.contractDir = contractDir;
-    this.continuous = continuous;
+    this.natsURL = natsURL;
+    this.natsAsyncConnection = natsAsyncConnection;
+    this.natsFuzzerTopicTransactions = natsFuzzerTopicTransactions;
+  }
+
+  /**
+   * @return The value of the {@code fillerMode} attribute
+   */
+  @Override
+  public FillerMode fillerMode() {
+    return fillerMode;
   }
 
   /**
@@ -159,11 +176,55 @@ public final class ImmutableChainFillerConfiguration
   }
 
   /**
-   * @return The value of the {@code continuous} attribute
+   * @return The value of the {@code natsURL} attribute
    */
   @Override
-  public boolean continuous() {
-    return continuous;
+  public String natsURL() {
+    return natsURL;
+  }
+
+  /**
+   * @return The value of the {@code natsAsyncConnection} attribute
+   */
+  @Override
+  public boolean natsAsyncConnection() {
+    return natsAsyncConnection;
+  }
+
+  /**
+   * @return The value of the {@code natsFuzzerTopicTransactions} attribute
+   */
+  @Override
+  public String natsFuzzerTopicTransactions() {
+    return natsFuzzerTopicTransactions;
+  }
+
+  /**
+   * Copy the current immutable object by setting a value for the {@link ChainFillerConfiguration#fillerMode() fillerMode} attribute.
+   * A value equality check is used to prevent copying of the same value by returning {@code this}.
+   * @param value A new value for fillerMode
+   * @return A modified copy of the {@code this} object
+   */
+  public final ImmutableChainFillerConfiguration withFillerMode(FillerMode value) {
+    if (this.fillerMode == value) return this;
+    FillerMode newValue = Objects.requireNonNull(value, "fillerMode");
+    if (this.fillerMode.equals(newValue)) return this;
+    return new ImmutableChainFillerConfiguration(
+        newValue,
+        this.numThreads,
+        this.repeatEveryNSeconds,
+        this.rpcEndpoints,
+        this.accountPrivateKeys,
+        this.recipientAddresses,
+        this.numTransactions,
+        this.numSmartContracts,
+        this.eip1559TxWeight,
+        this.fuzzTransferValueLowerBoundEth,
+        this.fuzzTransferValueUpperBoundEth,
+        this.contractDir,
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -175,6 +236,7 @@ public final class ImmutableChainFillerConfiguration
   public final ImmutableChainFillerConfiguration withNumThreads(int value) {
     if (this.numThreads == value) return this;
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         value,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -186,7 +248,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -198,6 +262,7 @@ public final class ImmutableChainFillerConfiguration
   public final ImmutableChainFillerConfiguration withRepeatEveryNSeconds(int value) {
     if (this.repeatEveryNSeconds == value) return this;
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         value,
         this.rpcEndpoints,
@@ -209,7 +274,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -220,6 +287,7 @@ public final class ImmutableChainFillerConfiguration
   public final ImmutableChainFillerConfiguration withRpcEndpoints(String... elements) {
     ImmutableList<String> newValue = ImmutableList.copyOf(elements);
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         newValue,
@@ -231,7 +299,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -244,6 +314,7 @@ public final class ImmutableChainFillerConfiguration
     if (this.rpcEndpoints == elements) return this;
     ImmutableList<String> newValue = ImmutableList.copyOf(elements);
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         newValue,
@@ -255,7 +326,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -266,6 +339,7 @@ public final class ImmutableChainFillerConfiguration
   public final ImmutableChainFillerConfiguration withAccountPrivateKeys(String... elements) {
     ImmutableList<String> newValue = ImmutableList.copyOf(elements);
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -277,7 +351,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -290,6 +366,7 @@ public final class ImmutableChainFillerConfiguration
     if (this.accountPrivateKeys == elements) return this;
     ImmutableList<String> newValue = ImmutableList.copyOf(elements);
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -301,7 +378,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -312,6 +391,7 @@ public final class ImmutableChainFillerConfiguration
   public final ImmutableChainFillerConfiguration withRecipientAddresses(String... elements) {
     ImmutableList<String> newValue = ImmutableList.copyOf(elements);
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -323,7 +403,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -336,6 +418,7 @@ public final class ImmutableChainFillerConfiguration
     if (this.recipientAddresses == elements) return this;
     ImmutableList<String> newValue = ImmutableList.copyOf(elements);
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -347,7 +430,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -359,6 +444,7 @@ public final class ImmutableChainFillerConfiguration
   public final ImmutableChainFillerConfiguration withNumTransactions(int value) {
     if (this.numTransactions == value) return this;
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -370,7 +456,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -382,6 +470,7 @@ public final class ImmutableChainFillerConfiguration
   public final ImmutableChainFillerConfiguration withNumSmartContracts(int value) {
     if (this.numSmartContracts == value) return this;
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -393,7 +482,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -405,6 +496,7 @@ public final class ImmutableChainFillerConfiguration
   public final ImmutableChainFillerConfiguration withEip1559TxWeight(double value) {
     if (Double.doubleToLongBits(this.eip1559TxWeight) == Double.doubleToLongBits(value)) return this;
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -416,7 +508,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -428,6 +522,7 @@ public final class ImmutableChainFillerConfiguration
   public final ImmutableChainFillerConfiguration withFuzzTransferValueLowerBoundEth(double value) {
     if (Double.doubleToLongBits(this.fuzzTransferValueLowerBoundEth) == Double.doubleToLongBits(value)) return this;
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -439,7 +534,9 @@ public final class ImmutableChainFillerConfiguration
         value,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -451,6 +548,7 @@ public final class ImmutableChainFillerConfiguration
   public final ImmutableChainFillerConfiguration withFuzzTransferValueUpperBoundEth(double value) {
     if (Double.doubleToLongBits(this.fuzzTransferValueUpperBoundEth) == Double.doubleToLongBits(value)) return this;
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -462,7 +560,9 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         value,
         this.contractDir,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
@@ -475,6 +575,7 @@ public final class ImmutableChainFillerConfiguration
     String newValue = Objects.requireNonNull(value, "contractDir");
     if (this.contractDir.equals(newValue)) return this;
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -486,18 +587,22 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         newValue,
-        this.continuous);
+        this.natsURL,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
   }
 
   /**
-   * Copy the current immutable object by setting a value for the {@link ChainFillerConfiguration#continuous() continuous} attribute.
-   * A value equality check is used to prevent copying of the same value by returning {@code this}.
-   * @param value A new value for continuous
+   * Copy the current immutable object by setting a value for the {@link ChainFillerConfiguration#natsURL() natsURL} attribute.
+   * An equals check used to prevent copying of the same value by returning {@code this}.
+   * @param value A new value for natsURL
    * @return A modified copy of the {@code this} object
    */
-  public final ImmutableChainFillerConfiguration withContinuous(boolean value) {
-    if (this.continuous == value) return this;
+  public final ImmutableChainFillerConfiguration withNatsURL(String value) {
+    String newValue = Objects.requireNonNull(value, "natsURL");
+    if (this.natsURL.equals(newValue)) return this;
     return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
         this.numThreads,
         this.repeatEveryNSeconds,
         this.rpcEndpoints,
@@ -509,7 +614,62 @@ public final class ImmutableChainFillerConfiguration
         this.fuzzTransferValueLowerBoundEth,
         this.fuzzTransferValueUpperBoundEth,
         this.contractDir,
-        value);
+        newValue,
+        this.natsAsyncConnection,
+        this.natsFuzzerTopicTransactions);
+  }
+
+  /**
+   * Copy the current immutable object by setting a value for the {@link ChainFillerConfiguration#natsAsyncConnection() natsAsyncConnection} attribute.
+   * A value equality check is used to prevent copying of the same value by returning {@code this}.
+   * @param value A new value for natsAsyncConnection
+   * @return A modified copy of the {@code this} object
+   */
+  public final ImmutableChainFillerConfiguration withNatsAsyncConnection(boolean value) {
+    if (this.natsAsyncConnection == value) return this;
+    return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
+        this.numThreads,
+        this.repeatEveryNSeconds,
+        this.rpcEndpoints,
+        this.accountPrivateKeys,
+        this.recipientAddresses,
+        this.numTransactions,
+        this.numSmartContracts,
+        this.eip1559TxWeight,
+        this.fuzzTransferValueLowerBoundEth,
+        this.fuzzTransferValueUpperBoundEth,
+        this.contractDir,
+        this.natsURL,
+        value,
+        this.natsFuzzerTopicTransactions);
+  }
+
+  /**
+   * Copy the current immutable object by setting a value for the {@link ChainFillerConfiguration#natsFuzzerTopicTransactions() natsFuzzerTopicTransactions} attribute.
+   * An equals check used to prevent copying of the same value by returning {@code this}.
+   * @param value A new value for natsFuzzerTopicTransactions
+   * @return A modified copy of the {@code this} object
+   */
+  public final ImmutableChainFillerConfiguration withNatsFuzzerTopicTransactions(String value) {
+    String newValue = Objects.requireNonNull(value, "natsFuzzerTopicTransactions");
+    if (this.natsFuzzerTopicTransactions.equals(newValue)) return this;
+    return new ImmutableChainFillerConfiguration(
+        this.fillerMode,
+        this.numThreads,
+        this.repeatEveryNSeconds,
+        this.rpcEndpoints,
+        this.accountPrivateKeys,
+        this.recipientAddresses,
+        this.numTransactions,
+        this.numSmartContracts,
+        this.eip1559TxWeight,
+        this.fuzzTransferValueLowerBoundEth,
+        this.fuzzTransferValueUpperBoundEth,
+        this.contractDir,
+        this.natsURL,
+        this.natsAsyncConnection,
+        newValue);
   }
 
   /**
@@ -524,7 +684,8 @@ public final class ImmutableChainFillerConfiguration
   }
 
   private boolean equalTo(ImmutableChainFillerConfiguration another) {
-    return numThreads == another.numThreads
+    return fillerMode.equals(another.fillerMode)
+        && numThreads == another.numThreads
         && repeatEveryNSeconds == another.repeatEveryNSeconds
         && rpcEndpoints.equals(another.rpcEndpoints)
         && accountPrivateKeys.equals(another.accountPrivateKeys)
@@ -535,16 +696,19 @@ public final class ImmutableChainFillerConfiguration
         && Double.doubleToLongBits(fuzzTransferValueLowerBoundEth) == Double.doubleToLongBits(another.fuzzTransferValueLowerBoundEth)
         && Double.doubleToLongBits(fuzzTransferValueUpperBoundEth) == Double.doubleToLongBits(another.fuzzTransferValueUpperBoundEth)
         && contractDir.equals(another.contractDir)
-        && continuous == another.continuous;
+        && natsURL.equals(another.natsURL)
+        && natsAsyncConnection == another.natsAsyncConnection
+        && natsFuzzerTopicTransactions.equals(another.natsFuzzerTopicTransactions);
   }
 
   /**
-   * Computes a hash code from attributes: {@code numThreads}, {@code repeatEveryNSeconds}, {@code rpcEndpoints}, {@code accountPrivateKeys}, {@code recipientAddresses}, {@code numTransactions}, {@code numSmartContracts}, {@code eip1559TxWeight}, {@code fuzzTransferValueLowerBoundEth}, {@code fuzzTransferValueUpperBoundEth}, {@code contractDir}, {@code continuous}.
+   * Computes a hash code from attributes: {@code fillerMode}, {@code numThreads}, {@code repeatEveryNSeconds}, {@code rpcEndpoints}, {@code accountPrivateKeys}, {@code recipientAddresses}, {@code numTransactions}, {@code numSmartContracts}, {@code eip1559TxWeight}, {@code fuzzTransferValueLowerBoundEth}, {@code fuzzTransferValueUpperBoundEth}, {@code contractDir}, {@code natsURL}, {@code natsAsyncConnection}, {@code natsFuzzerTopicTransactions}.
    * @return hashCode value
    */
   @Override
   public int hashCode() {
     @Var int h = 5381;
+    h += (h << 5) + fillerMode.hashCode();
     h += (h << 5) + numThreads;
     h += (h << 5) + repeatEveryNSeconds;
     h += (h << 5) + rpcEndpoints.hashCode();
@@ -556,7 +720,9 @@ public final class ImmutableChainFillerConfiguration
     h += (h << 5) + Doubles.hashCode(fuzzTransferValueLowerBoundEth);
     h += (h << 5) + Doubles.hashCode(fuzzTransferValueUpperBoundEth);
     h += (h << 5) + contractDir.hashCode();
-    h += (h << 5) + Booleans.hashCode(continuous);
+    h += (h << 5) + natsURL.hashCode();
+    h += (h << 5) + Booleans.hashCode(natsAsyncConnection);
+    h += (h << 5) + natsFuzzerTopicTransactions.hashCode();
     return h;
   }
 
@@ -568,6 +734,7 @@ public final class ImmutableChainFillerConfiguration
   public String toString() {
     return MoreObjects.toStringHelper("ChainFillerConfiguration")
         .omitNullValues()
+        .add("fillerMode", fillerMode)
         .add("numThreads", numThreads)
         .add("repeatEveryNSeconds", repeatEveryNSeconds)
         .add("rpcEndpoints", rpcEndpoints)
@@ -579,7 +746,9 @@ public final class ImmutableChainFillerConfiguration
         .add("fuzzTransferValueLowerBoundEth", fuzzTransferValueLowerBoundEth)
         .add("fuzzTransferValueUpperBoundEth", fuzzTransferValueUpperBoundEth)
         .add("contractDir", contractDir)
-        .add("continuous", continuous)
+        .add("natsURL", natsURL)
+        .add("natsAsyncConnection", natsAsyncConnection)
+        .add("natsFuzzerTopicTransactions", natsFuzzerTopicTransactions)
         .toString();
   }
 
@@ -603,6 +772,7 @@ public final class ImmutableChainFillerConfiguration
    * Creates a builder for {@link ImmutableChainFillerConfiguration ImmutableChainFillerConfiguration}.
    * <pre>
    * ImmutableChainFillerConfiguration.builder()
+   *    .fillerMode(tech.pegasys.net.config.FillerMode) // required {@link ChainFillerConfiguration#fillerMode() fillerMode}
    *    .numThreads(int) // required {@link ChainFillerConfiguration#numThreads() numThreads}
    *    .repeatEveryNSeconds(int) // required {@link ChainFillerConfiguration#repeatEveryNSeconds() repeatEveryNSeconds}
    *    .addRpcEndpoints|addAllRpcEndpoints(String) // {@link ChainFillerConfiguration#rpcEndpoints() rpcEndpoints} elements
@@ -614,7 +784,9 @@ public final class ImmutableChainFillerConfiguration
    *    .fuzzTransferValueLowerBoundEth(double) // required {@link ChainFillerConfiguration#fuzzTransferValueLowerBoundEth() fuzzTransferValueLowerBoundEth}
    *    .fuzzTransferValueUpperBoundEth(double) // required {@link ChainFillerConfiguration#fuzzTransferValueUpperBoundEth() fuzzTransferValueUpperBoundEth}
    *    .contractDir(String) // required {@link ChainFillerConfiguration#contractDir() contractDir}
-   *    .continuous(boolean) // required {@link ChainFillerConfiguration#continuous() continuous}
+   *    .natsURL(String) // required {@link ChainFillerConfiguration#natsURL() natsURL}
+   *    .natsAsyncConnection(boolean) // required {@link ChainFillerConfiguration#natsAsyncConnection() natsAsyncConnection}
+   *    .natsFuzzerTopicTransactions(String) // required {@link ChainFillerConfiguration#natsFuzzerTopicTransactions() natsFuzzerTopicTransactions}
    *    .build();
    * </pre>
    * @return A new ImmutableChainFillerConfiguration builder
@@ -633,17 +805,21 @@ public final class ImmutableChainFillerConfiguration
   @Generated(from = "ChainFillerConfiguration", generator = "Immutables")
   @NotThreadSafe
   public static final class Builder {
-    private static final long INIT_BIT_NUM_THREADS = 0x1L;
-    private static final long INIT_BIT_REPEAT_EVERY_N_SECONDS = 0x2L;
-    private static final long INIT_BIT_NUM_TRANSACTIONS = 0x4L;
-    private static final long INIT_BIT_NUM_SMART_CONTRACTS = 0x8L;
-    private static final long INIT_BIT_EIP1559_TX_WEIGHT = 0x10L;
-    private static final long INIT_BIT_FUZZ_TRANSFER_VALUE_LOWER_BOUND_ETH = 0x20L;
-    private static final long INIT_BIT_FUZZ_TRANSFER_VALUE_UPPER_BOUND_ETH = 0x40L;
-    private static final long INIT_BIT_CONTRACT_DIR = 0x80L;
-    private static final long INIT_BIT_CONTINUOUS = 0x100L;
-    private long initBits = 0x1ffL;
+    private static final long INIT_BIT_FILLER_MODE = 0x1L;
+    private static final long INIT_BIT_NUM_THREADS = 0x2L;
+    private static final long INIT_BIT_REPEAT_EVERY_N_SECONDS = 0x4L;
+    private static final long INIT_BIT_NUM_TRANSACTIONS = 0x8L;
+    private static final long INIT_BIT_NUM_SMART_CONTRACTS = 0x10L;
+    private static final long INIT_BIT_EIP1559_TX_WEIGHT = 0x20L;
+    private static final long INIT_BIT_FUZZ_TRANSFER_VALUE_LOWER_BOUND_ETH = 0x40L;
+    private static final long INIT_BIT_FUZZ_TRANSFER_VALUE_UPPER_BOUND_ETH = 0x80L;
+    private static final long INIT_BIT_CONTRACT_DIR = 0x100L;
+    private static final long INIT_BIT_NATS_U_R_L = 0x200L;
+    private static final long INIT_BIT_NATS_ASYNC_CONNECTION = 0x400L;
+    private static final long INIT_BIT_NATS_FUZZER_TOPIC_TRANSACTIONS = 0x800L;
+    private long initBits = 0xfffL;
 
+    private @Nullable FillerMode fillerMode;
     private int numThreads;
     private int repeatEveryNSeconds;
     private ImmutableList.Builder<String> rpcEndpoints = ImmutableList.builder();
@@ -655,7 +831,9 @@ public final class ImmutableChainFillerConfiguration
     private double fuzzTransferValueLowerBoundEth;
     private double fuzzTransferValueUpperBoundEth;
     private @Nullable String contractDir;
-    private boolean continuous;
+    private @Nullable String natsURL;
+    private boolean natsAsyncConnection;
+    private @Nullable String natsFuzzerTopicTransactions;
 
     private Builder() {
     }
@@ -671,6 +849,7 @@ public final class ImmutableChainFillerConfiguration
     @CanIgnoreReturnValue 
     public final Builder from(ChainFillerConfiguration instance) {
       Objects.requireNonNull(instance, "instance");
+      fillerMode(instance.fillerMode());
       numThreads(instance.numThreads());
       repeatEveryNSeconds(instance.repeatEveryNSeconds());
       addAllRpcEndpoints(instance.rpcEndpoints());
@@ -682,7 +861,21 @@ public final class ImmutableChainFillerConfiguration
       fuzzTransferValueLowerBoundEth(instance.fuzzTransferValueLowerBoundEth());
       fuzzTransferValueUpperBoundEth(instance.fuzzTransferValueUpperBoundEth());
       contractDir(instance.contractDir());
-      continuous(instance.continuous());
+      natsURL(instance.natsURL());
+      natsAsyncConnection(instance.natsAsyncConnection());
+      natsFuzzerTopicTransactions(instance.natsFuzzerTopicTransactions());
+      return this;
+    }
+
+    /**
+     * Initializes the value for the {@link ChainFillerConfiguration#fillerMode() fillerMode} attribute.
+     * @param fillerMode The value for fillerMode 
+     * @return {@code this} builder for use in a chained invocation
+     */
+    @CanIgnoreReturnValue 
+    public final Builder fillerMode(FillerMode fillerMode) {
+      this.fillerMode = Objects.requireNonNull(fillerMode, "fillerMode");
+      initBits &= ~INIT_BIT_FILLER_MODE;
       return this;
     }
 
@@ -918,14 +1111,38 @@ public final class ImmutableChainFillerConfiguration
     }
 
     /**
-     * Initializes the value for the {@link ChainFillerConfiguration#continuous() continuous} attribute.
-     * @param continuous The value for continuous 
+     * Initializes the value for the {@link ChainFillerConfiguration#natsURL() natsURL} attribute.
+     * @param natsURL The value for natsURL 
      * @return {@code this} builder for use in a chained invocation
      */
     @CanIgnoreReturnValue 
-    public final Builder continuous(boolean continuous) {
-      this.continuous = continuous;
-      initBits &= ~INIT_BIT_CONTINUOUS;
+    public final Builder natsURL(String natsURL) {
+      this.natsURL = Objects.requireNonNull(natsURL, "natsURL");
+      initBits &= ~INIT_BIT_NATS_U_R_L;
+      return this;
+    }
+
+    /**
+     * Initializes the value for the {@link ChainFillerConfiguration#natsAsyncConnection() natsAsyncConnection} attribute.
+     * @param natsAsyncConnection The value for natsAsyncConnection 
+     * @return {@code this} builder for use in a chained invocation
+     */
+    @CanIgnoreReturnValue 
+    public final Builder natsAsyncConnection(boolean natsAsyncConnection) {
+      this.natsAsyncConnection = natsAsyncConnection;
+      initBits &= ~INIT_BIT_NATS_ASYNC_CONNECTION;
+      return this;
+    }
+
+    /**
+     * Initializes the value for the {@link ChainFillerConfiguration#natsFuzzerTopicTransactions() natsFuzzerTopicTransactions} attribute.
+     * @param natsFuzzerTopicTransactions The value for natsFuzzerTopicTransactions 
+     * @return {@code this} builder for use in a chained invocation
+     */
+    @CanIgnoreReturnValue 
+    public final Builder natsFuzzerTopicTransactions(String natsFuzzerTopicTransactions) {
+      this.natsFuzzerTopicTransactions = Objects.requireNonNull(natsFuzzerTopicTransactions, "natsFuzzerTopicTransactions");
+      initBits &= ~INIT_BIT_NATS_FUZZER_TOPIC_TRANSACTIONS;
       return this;
     }
 
@@ -939,6 +1156,7 @@ public final class ImmutableChainFillerConfiguration
         throw new IllegalStateException(formatRequiredAttributesMessage());
       }
       return new ImmutableChainFillerConfiguration(
+          fillerMode,
           numThreads,
           repeatEveryNSeconds,
           rpcEndpoints.build(),
@@ -950,11 +1168,14 @@ public final class ImmutableChainFillerConfiguration
           fuzzTransferValueLowerBoundEth,
           fuzzTransferValueUpperBoundEth,
           contractDir,
-          continuous);
+          natsURL,
+          natsAsyncConnection,
+          natsFuzzerTopicTransactions);
     }
 
     private String formatRequiredAttributesMessage() {
       List<String> attributes = new ArrayList<>();
+      if ((initBits & INIT_BIT_FILLER_MODE) != 0) attributes.add("fillerMode");
       if ((initBits & INIT_BIT_NUM_THREADS) != 0) attributes.add("numThreads");
       if ((initBits & INIT_BIT_REPEAT_EVERY_N_SECONDS) != 0) attributes.add("repeatEveryNSeconds");
       if ((initBits & INIT_BIT_NUM_TRANSACTIONS) != 0) attributes.add("numTransactions");
@@ -963,7 +1184,9 @@ public final class ImmutableChainFillerConfiguration
       if ((initBits & INIT_BIT_FUZZ_TRANSFER_VALUE_LOWER_BOUND_ETH) != 0) attributes.add("fuzzTransferValueLowerBoundEth");
       if ((initBits & INIT_BIT_FUZZ_TRANSFER_VALUE_UPPER_BOUND_ETH) != 0) attributes.add("fuzzTransferValueUpperBoundEth");
       if ((initBits & INIT_BIT_CONTRACT_DIR) != 0) attributes.add("contractDir");
-      if ((initBits & INIT_BIT_CONTINUOUS) != 0) attributes.add("continuous");
+      if ((initBits & INIT_BIT_NATS_U_R_L) != 0) attributes.add("natsURL");
+      if ((initBits & INIT_BIT_NATS_ASYNC_CONNECTION) != 0) attributes.add("natsAsyncConnection");
+      if ((initBits & INIT_BIT_NATS_FUZZER_TOPIC_TRANSACTIONS) != 0) attributes.add("natsFuzzerTopicTransactions");
       return "Cannot build ChainFillerConfiguration, some of required attributes are not set " + attributes;
     }
   }

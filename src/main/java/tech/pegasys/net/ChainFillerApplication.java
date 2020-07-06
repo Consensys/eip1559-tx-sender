@@ -6,6 +6,7 @@ package tech.pegasys.net;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import tech.pegasys.net.cli.Options;
+import tech.pegasys.net.config.FillerMode;
 import tech.pegasys.net.core.dagger.DaggerChainFillerComponent;
 
 @Command(
@@ -17,6 +18,7 @@ public class ChainFillerApplication implements Runnable {
 
   public static void main(final String[] args) {
     final CommandLine commandLine = new CommandLine(new ChainFillerApplication());
+    commandLine.registerConverter(FillerMode.class, FillerMode::fromString);
     commandLine.addMixin("chain-filler", Options.getInstance());
     System.exit(commandLine.execute(args));
   }

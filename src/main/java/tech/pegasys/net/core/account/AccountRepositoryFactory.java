@@ -1,8 +1,8 @@
 package tech.pegasys.net.core.account;
 
-import tech.pegasys.net.api.service.AccountRepository;
 import tech.pegasys.net.api.model.Account;
 import tech.pegasys.net.api.model.ImmutableAccount;
+import tech.pegasys.net.api.service.AccountRepository;
 
 import java.util.List;
 import java.util.Map;

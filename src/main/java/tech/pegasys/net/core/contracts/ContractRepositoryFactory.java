@@ -1,7 +1,7 @@
 package tech.pegasys.net.core.contracts;
 
-import tech.pegasys.net.api.service.ContractRepository;
 import tech.pegasys.net.api.model.Contract;
+import tech.pegasys.net.api.service.ContractRepository;
 import tech.pegasys.net.util.FileUtils;
 
 import java.io.File;

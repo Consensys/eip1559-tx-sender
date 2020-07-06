@@ -2,6 +2,7 @@ package tech.pegasys.net.cli;
 
 import picocli.CommandLine.Option;
 import tech.pegasys.net.config.ChainFillerConfiguration;
+import tech.pegasys.net.config.FillerMode;
 import tech.pegasys.net.config.ImmutableChainFillerConfiguration;
 
 import java.util.Arrays;
@@ -95,11 +96,30 @@ public class Options {
   private String contractDir = "";
 
   @Option(
-      names = {"--continuous"},
-      paramLabel = "<bool>",
+      names = {"--filler-mode"},
+      paramLabel = "<MODE>",
+      description = "Filler mode, possible values are ${COMPLETION-CANDIDATES} (default: ONESHOT)")
+  private FillerMode fillerMode = null;
+
+  @Option(
+      names = {"--nats-url"},
+      paramLabel = "<nats://host:port>",
       arity = "1",
-      description = "Whether or not continuous mode is enabled. (default: ${DEFAULT-VALUE})")
-  private Boolean continuous = false;
+      description = "NATS URL. (default: ${DEFAULT-VALUE})")
+  private String natsURL = "nats://127.0.0.1:4222";
+
+  @Option(
+      names = {"--nats-async-connection-enabled"},
+      paramLabel = "<bool>",
+      description = " (default: ${DEFAULT-VALUE})")
+  private Boolean natsAsyncConnection = false;
+
+  @Option(
+      names = {"--nats-fuzzer-topic-transactions"},
+      paramLabel = "<topic>",
+      arity = "1",
+      description = "NATS fuzzer transaction topic. (default: ${DEFAULT-VALUE})")
+  private String natsFuzzerTopicTransactions = "fuzz.transactions";
 
   public static Options getInstance() {
     return instance;
@@ -107,6 +127,7 @@ public class Options {
 
   public ChainFillerConfiguration toTxSenderConfiguration() {
     return ImmutableChainFillerConfiguration.builder()
+        .fillerMode(fillerMode)
         .addAllRpcEndpoints(rpcEndpoints)
         .addAllAccountPrivateKeys(accountPrivateKeys)
         .addAllRecipientAddresses(recipientAddresses)
@@ -118,7 +139,9 @@ public class Options {
         .fuzzTransferValueLowerBoundEth(fuzzTransferValueLowerBoundEth)
         .fuzzTransferValueUpperBoundEth(fuzzTransferValueUpperBoundEth)
         .contractDir(contractDir)
-        .continuous(continuous)
+        .natsURL(natsURL)
+        .natsAsyncConnection(natsAsyncConnection)
+        .natsFuzzerTopicTransactions(natsFuzzerTopicTransactions)
         .build();
   }
 }

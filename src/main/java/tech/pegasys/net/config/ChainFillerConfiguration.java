@@ -6,6 +6,8 @@ import java.util.List;
 
 @Value.Immutable
 public interface ChainFillerConfiguration {
+  FillerMode fillerMode();
+
   int numThreads();
 
   int repeatEveryNSeconds();
@@ -28,5 +30,9 @@ public interface ChainFillerConfiguration {
 
   String contractDir();
 
-  boolean continuous();
+  String natsURL();
+
+  boolean natsAsyncConnection();
+
+  String natsFuzzerTopicTransactions();
 }

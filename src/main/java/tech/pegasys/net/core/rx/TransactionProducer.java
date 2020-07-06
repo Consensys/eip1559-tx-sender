@@ -7,10 +7,10 @@ import org.tinylog.Logger;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import tech.pegasys.net.api.service.ChainFiller;
-import tech.pegasys.net.api.service.TransactionSigner;
 import tech.pegasys.net.api.model.ImmutableSignedTransaction;
 import tech.pegasys.net.api.model.SignedTransaction;
+import tech.pegasys.net.api.service.ChainFiller;
+import tech.pegasys.net.api.service.TransactionSigner;
 
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicLong;

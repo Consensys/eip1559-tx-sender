@@ -1,13 +1,13 @@
 package tech.pegasys.net.core;
 
 import org.tinylog.Logger;
-import tech.pegasys.net.api.AccountRepository;
-import tech.pegasys.net.api.ChainFiller;
-import tech.pegasys.net.api.ContractRepository;
-import tech.pegasys.net.api.CredentialsRepository;
-import tech.pegasys.net.api.EIP1559TransactionCreator;
-import tech.pegasys.net.api.LegacyTransactionCreator;
-import tech.pegasys.net.api.Reporter;
+import tech.pegasys.net.api.service.AccountRepository;
+import tech.pegasys.net.api.service.ChainFiller;
+import tech.pegasys.net.api.service.ContractRepository;
+import tech.pegasys.net.api.service.CredentialsRepository;
+import tech.pegasys.net.api.service.EIP1559TransactionCreator;
+import tech.pegasys.net.api.service.LegacyTransactionCreator;
+import tech.pegasys.net.api.service.Reporter;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 
 import javax.inject.Inject;

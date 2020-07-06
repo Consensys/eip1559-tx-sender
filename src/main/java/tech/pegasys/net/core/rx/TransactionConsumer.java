@@ -2,15 +2,15 @@ package tech.pegasys.net.core.rx;
 
 import io.reactivex.subscribers.DefaultSubscriber;
 import org.tinylog.Logger;
+import org.web3j.protocol.Web3j;
 import org.web3j.utils.Numeric;
 import tech.pegasys.net.api.model.SignedTransaction;
 
 public class TransactionConsumer extends DefaultSubscriber<SignedTransaction> {
+  private final Web3j web3;
 
-  private final Integer id;
-
-  public TransactionConsumer(final Integer id) {
-    this.id = id;
+  public TransactionConsumer(final Web3j web3) {
+    this.web3 = web3;
   }
 
   @Override
@@ -20,10 +20,7 @@ public class TransactionConsumer extends DefaultSubscriber<SignedTransaction> {
 
   @Override
   public void onNext(final SignedTransaction signedTransaction) {
-    Logger.info(
-        "consumer [{}] received tx: {}",
-        id,
-        Numeric.toHexString(signedTransaction.signedMessage()));
+    submit(signedTransaction);
     request(1);
   }
 
@@ -35,5 +32,13 @@ public class TransactionConsumer extends DefaultSubscriber<SignedTransaction> {
   @Override
   public void onComplete() {
     Logger.info("transaction consumer completed");
+  }
+
+  private void submit(final SignedTransaction signedTransaction) {
+    try {
+      web3.ethSendRawTransaction(Numeric.toHexString(signedTransaction.signedMessage())).send();
+    } catch (final Exception e) {
+      Logger.error(e, "error occurred while submitting transaction");
+    }
   }
 }

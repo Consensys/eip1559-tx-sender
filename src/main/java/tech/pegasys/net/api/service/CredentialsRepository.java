@@ -1,4 +1,4 @@
-package tech.pegasys.net.api;
+package tech.pegasys.net.api.service;
 
 import org.web3j.crypto.Credentials;
 

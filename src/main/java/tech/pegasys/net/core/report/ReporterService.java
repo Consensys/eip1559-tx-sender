@@ -1,7 +1,7 @@
 package tech.pegasys.net.core.report;
 
 import org.json.JSONObject;
-import tech.pegasys.net.api.Reporter;
+import tech.pegasys.net.api.service.Reporter;
 
 import java.util.concurrent.atomic.AtomicLong;
 

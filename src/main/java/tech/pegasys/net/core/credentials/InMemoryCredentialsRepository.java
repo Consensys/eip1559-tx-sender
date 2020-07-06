@@ -2,7 +2,7 @@ package tech.pegasys.net.core.credentials;
 
 import org.immutables.value.Value;
 import org.web3j.crypto.Credentials;
-import tech.pegasys.net.api.CredentialsRepository;
+import tech.pegasys.net.api.service.CredentialsRepository;
 
 import java.util.Map;
 import java.util.Optional;

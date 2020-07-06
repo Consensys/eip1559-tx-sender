@@ -1,7 +1,7 @@
 package tech.pegasys.net.core.account;
 
 import org.immutables.value.Value;
-import tech.pegasys.net.api.AccountRepository;
+import tech.pegasys.net.api.service.AccountRepository;
 import tech.pegasys.net.api.model.Account;
 
 import java.util.Iterator;

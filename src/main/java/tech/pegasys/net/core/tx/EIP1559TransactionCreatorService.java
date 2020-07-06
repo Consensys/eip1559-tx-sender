@@ -1,8 +1,8 @@
 package tech.pegasys.net.core.tx;
 
-import tech.pegasys.net.api.AccountRepository;
-import tech.pegasys.net.api.EIP1559TransactionCreator;
-import tech.pegasys.net.api.TransactionFuzzer;
+import tech.pegasys.net.api.service.AccountRepository;
+import tech.pegasys.net.api.service.EIP1559TransactionCreator;
+import tech.pegasys.net.api.service.TransactionFuzzer;
 import tech.pegasys.net.api.model.Account;
 import tech.pegasys.net.api.model.EIP1559Transaction;
 import tech.pegasys.net.api.model.ImmutableEIP1559Transaction;

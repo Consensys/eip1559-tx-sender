@@ -1,6 +1,6 @@
 package tech.pegasys.net.core.tx;
 
-import tech.pegasys.net.api.TransactionFuzzer;
+import tech.pegasys.net.api.service.TransactionFuzzer;
 import tech.pegasys.net.util.NumberUtils;
 
 import java.math.BigDecimal;

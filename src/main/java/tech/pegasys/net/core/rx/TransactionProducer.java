@@ -7,8 +7,8 @@ import org.tinylog.Logger;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import tech.pegasys.net.api.ChainFiller;
-import tech.pegasys.net.api.TransactionSigner;
+import tech.pegasys.net.api.service.ChainFiller;
+import tech.pegasys.net.api.service.TransactionSigner;
 import tech.pegasys.net.api.model.ImmutableSignedTransaction;
 import tech.pegasys.net.api.model.SignedTransaction;
 
@@ -16,7 +16,6 @@ import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class TransactionProducer extends Flowable<SignedTransaction> {
-  private final Integer id;
   private final ChainFiller chainFiller;
   private final Web3j web3;
   private final Credentials credentials;
@@ -24,11 +23,7 @@ public class TransactionProducer extends Flowable<SignedTransaction> {
   private BigInteger initialGasPrice;
 
   public TransactionProducer(
-      final Integer id,
-      final ChainFiller chainFiller,
-      final Web3j web3,
-      final Credentials credentials) {
-    this.id = id;
+      final ChainFiller chainFiller, final Web3j web3, final Credentials credentials) {
     this.chainFiller = chainFiller;
     this.web3 = web3;
     this.credentials = credentials;
@@ -55,6 +50,7 @@ public class TransactionProducer extends Flowable<SignedTransaction> {
           private final AtomicLong outStandingRequests = new AtomicLong(0);
           /** cancellation flag. */
           private volatile boolean cancelled = false;
+
           private volatile boolean isProducing = false;
 
           @Override
@@ -85,11 +81,6 @@ public class TransactionProducer extends Flowable<SignedTransaction> {
   }
 
   private SignedTransaction generateSignedTransaction() {
-    Logger.debug("producer [{}] generating transaction", id);
-    try {
-      Thread.sleep(200);
-    } catch (Exception e) {
-    }
     return ImmutableSignedTransaction.builder()
         .signedMessage(
             TransactionSigner.sign(

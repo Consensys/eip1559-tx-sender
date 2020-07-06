@@ -14,6 +14,7 @@
 #### Samples
 
 ##### Internal fuzzing
+
 ```shell script
 ./build/install/chain-filler/bin/chain-filler \
 --rpc-endpoints=http://besu:8545,http://geth:8545 \
@@ -26,8 +27,10 @@
 --fuzz-transfer-value-lower-bound-eth=0.42 \
 --fuzz-transfer-value-upper-bound-eth=8.67 \
 --contract-dir=/etc/contracts
+```
 
 ##### External fuzzing with NATS
+
 ```shell script
 ./build/install/chain-filler/bin/chain-filler \
 --rpc-endpoints=http://127.0.0.1:8545 \

@@ -20,7 +20,9 @@ import tech.pegasys.net.core.tx.LegacyTransactionCreatorService;
 import tech.pegasys.net.core.tx.TransactionFuzzerService;
 
 import javax.inject.Singleton;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 @Module
 public class ChainFillerModule {
@@ -49,8 +51,15 @@ public class ChainFillerModule {
   @Singleton
   public static ContractRepository contractRepository(
       final ChainFillerConfiguration configuration) {
-    return ContractRepositoryFactory.inMemoryContractRepository(
-        Paths.get(configuration.contractDir()));
+    final Optional<Path> contractsPath;
+    if (configuration.contractDir() == null
+        || configuration.contractDir().isEmpty()
+        || configuration.contractDir().isBlank()) {
+      contractsPath = Optional.empty();
+    } else {
+      contractsPath = Optional.of(Paths.get(configuration.contractDir()));
+    }
+    return ContractRepositoryFactory.inMemoryContractRepository(contractsPath);
   }
 
   @Provides

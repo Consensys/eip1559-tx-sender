@@ -7,6 +7,7 @@ import io.nats.client.Message;
 import io.nats.client.Nats;
 import io.nats.client.Options;
 import org.tinylog.Logger;
+import tech.pegasys.net.api.model.payload.TransactionPayload;
 import tech.pegasys.net.api.service.ChainFiller;
 
 import java.nio.charset.StandardCharsets;
@@ -48,16 +49,6 @@ public class NatsFuzzer {
     }
   }
 
-  public static void main(String[] args) {
-    try {
-      final Connection nc = Nats.connect("nats://127.0.0.1:4222");
-      final String message = "{\"nonce\":2,\"value\":1000000000000000000,\"gasPrice\":21000}";
-      nc.publish("fuzz.transactions", message.getBytes(StandardCharsets.UTF_8));
-    } catch (final Exception e) {
-      System.err.println(e.getMessage());
-    }
-  }
-
   public void handleConnection(final Connection nc, final ConnectionListener.Events type) {
     switch (type) {
       case CLOSED:
@@ -92,5 +83,17 @@ public class NatsFuzzer {
   private void onTransactionsMessage(final Message msg) {
     final String messageString = new String(msg.getData(), StandardCharsets.UTF_8);
     Logger.debug("received message on transactions topic: {}", messageString);
+    final TransactionPayload transactionPayload = TransactionPayload.from(messageString);
+    System.out.println(transactionPayload.toString());
   }
+
+  /*public static void main(String[] args) {
+    try {
+      final Connection nc = Nats.connect("nats://127.0.0.1:4222");
+      final String message = "{\"nonce\":3,\"value\":1000000000000000000,\"gasPrice\":21000}";
+      nc.publish("fuzz.transactions", message.getBytes(StandardCharsets.UTF_8));
+    } catch (final Exception e) {
+      System.err.println(e.getMessage());
+    }
+  }*/
 }

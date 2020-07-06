@@ -99,7 +99,7 @@ public class Options {
       names = {"--filler-mode"},
       paramLabel = "<MODE>",
       description = "Filler mode, possible values are ${COMPLETION-CANDIDATES} (default: ONESHOT)")
-  private FillerMode fillerMode = null;
+  private FillerMode fillerMode = FillerMode.ONESHOT;
 
   @Option(
       names = {"--nats-url"},

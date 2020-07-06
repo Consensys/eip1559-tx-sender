@@ -10,7 +10,7 @@
 ```shell script
 ./build/install/chain-filler/bin/chain-filler --help
 ```
-![Help](help-screenshot.png)
+![Help](./img/help-screenshot.png)
 #### Samples
 
 ##### Internal fuzzing

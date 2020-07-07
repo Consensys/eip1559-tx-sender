@@ -1,16 +1,16 @@
 package tech.pegasys.net.core.tx;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import tech.pegasys.net.api.model.Account;
 import tech.pegasys.net.api.model.EIP1559Transaction;
 import tech.pegasys.net.api.model.ImmutableEIP1559Transaction;
 import tech.pegasys.net.api.model.payload.TransactionPayload;
-import tech.pegasys.net.api.service.AccountRepository;
-import tech.pegasys.net.api.service.EIP1559TransactionCreator;
-import tech.pegasys.net.api.service.TransactionFuzzer;
+import tech.pegasys.net.api.repository.AccountRepository;
+import tech.pegasys.net.api.service.transaction.EIP1559TransactionCreator;
+import tech.pegasys.net.api.service.transaction.TransactionFuzzer;
 import tech.pegasys.net.config.ChainFillerConfiguration;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 
 public class EIP1559TransactionCreatorService implements EIP1559TransactionCreator {
   private final ChainFillerConfiguration configuration;

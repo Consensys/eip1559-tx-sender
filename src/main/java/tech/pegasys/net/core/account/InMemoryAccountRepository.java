@@ -1,14 +1,14 @@
 package tech.pegasys.net.core.account;
 
-import org.immutables.value.Value;
-import tech.pegasys.net.api.model.Account;
-import tech.pegasys.net.api.service.AccountRepository;
-
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
+
+import org.immutables.value.Value;
+import tech.pegasys.net.api.model.Account;
+import tech.pegasys.net.api.repository.AccountRepository;
 
 @Value.Immutable
 public abstract class InMemoryAccountRepository implements AccountRepository {

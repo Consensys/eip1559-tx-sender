@@ -1,12 +1,12 @@
 package tech.pegasys.net.core.credentials;
 
-import org.web3j.crypto.Credentials;
-import tech.pegasys.net.api.service.CredentialsRepository;
-
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import org.web3j.crypto.Credentials;
+import tech.pegasys.net.api.repository.CredentialsRepository;
 
 public class CredentialsRepositoryFactory {
 

@@ -1,9 +1,9 @@
-package tech.pegasys.net.api.service;
-
-import tech.pegasys.net.api.model.Account;
+package tech.pegasys.net.api.repository;
 
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import tech.pegasys.net.api.model.Account;
 
 public interface AccountRepository {
 

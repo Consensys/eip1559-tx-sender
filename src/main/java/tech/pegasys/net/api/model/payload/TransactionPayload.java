@@ -1,9 +1,9 @@
 package tech.pegasys.net.api.model.payload;
 
+import java.math.BigInteger;
+
 import com.google.gson.Gson;
 import tech.pegasys.net.api.model.TransactionType;
-
-import java.math.BigInteger;
 
 public class TransactionPayload {
   private static final Gson GSON = new Gson().newBuilder().setPrettyPrinting().create();

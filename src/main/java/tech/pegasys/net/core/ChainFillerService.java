@@ -1,22 +1,22 @@
 package tech.pegasys.net.core;
 
-import org.tinylog.Logger;
-import tech.pegasys.net.api.service.AccountRepository;
-import tech.pegasys.net.api.service.ChainFiller;
-import tech.pegasys.net.api.service.ContractRepository;
-import tech.pegasys.net.api.service.CredentialsRepository;
-import tech.pegasys.net.api.service.EIP1559TransactionCreator;
-import tech.pegasys.net.api.service.LegacyTransactionCreator;
-import tech.pegasys.net.api.service.Reporter;
-import tech.pegasys.net.config.ChainFillerConfiguration;
-import tech.pegasys.net.fuzzer.NatsFuzzer;
-
-import javax.inject.Inject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+
+import org.tinylog.Logger;
+import tech.pegasys.net.api.repository.AccountRepository;
+import tech.pegasys.net.api.repository.ContractRepository;
+import tech.pegasys.net.api.repository.CredentialsRepository;
+import tech.pegasys.net.api.service.ChainFiller;
+import tech.pegasys.net.api.service.metrics.Reporter;
+import tech.pegasys.net.api.service.transaction.EIP1559TransactionCreator;
+import tech.pegasys.net.api.service.transaction.LegacyTransactionCreator;
+import tech.pegasys.net.config.ChainFillerConfiguration;
+import tech.pegasys.net.fuzzer.NatsFuzzer;
 
 public class ChainFillerService implements ChainFiller {
   private final ChainFillerConfiguration configuration;

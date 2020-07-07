@@ -1,8 +1,8 @@
 package tech.pegasys.net.config;
 
-import org.immutables.value.Value;
-
 import java.util.List;
+
+import org.immutables.value.Value;
 
 @Value.Immutable
 public interface ChainFillerConfiguration {

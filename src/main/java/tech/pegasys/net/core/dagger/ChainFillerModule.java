@@ -1,14 +1,19 @@
 package tech.pegasys.net.core.dagger;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import tech.pegasys.net.api.service.AccountRepository;
-import tech.pegasys.net.api.service.ContractRepository;
-import tech.pegasys.net.api.service.CredentialsRepository;
-import tech.pegasys.net.api.service.EIP1559TransactionCreator;
-import tech.pegasys.net.api.service.LegacyTransactionCreator;
-import tech.pegasys.net.api.service.Reporter;
-import tech.pegasys.net.api.service.TransactionFuzzer;
+import tech.pegasys.net.api.repository.AccountRepository;
+import tech.pegasys.net.api.repository.ContractRepository;
+import tech.pegasys.net.api.repository.CredentialsRepository;
+import tech.pegasys.net.api.service.metrics.Reporter;
+import tech.pegasys.net.api.service.transaction.EIP1559TransactionCreator;
+import tech.pegasys.net.api.service.transaction.LegacyTransactionCreator;
+import tech.pegasys.net.api.service.transaction.TransactionFuzzer;
 import tech.pegasys.net.cli.Options;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 import tech.pegasys.net.core.account.AccountRepositoryFactory;
@@ -19,18 +24,13 @@ import tech.pegasys.net.core.tx.EIP1559TransactionCreatorService;
 import tech.pegasys.net.core.tx.LegacyTransactionCreatorService;
 import tech.pegasys.net.core.tx.TransactionFuzzerService;
 
-import javax.inject.Singleton;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
-
 @Module
 public class ChainFillerModule {
 
   @Provides
   @Singleton
   public static ChainFillerConfiguration chainFillerConfiguration() {
-    return Options.getInstance().toTxSenderConfiguration();
+    return Options.getInstance().toChainFillerConfiguration();
   }
 
   @Provides

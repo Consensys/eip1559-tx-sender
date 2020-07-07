@@ -1,5 +1,12 @@
 package tech.pegasys.net.fuzzer;
 
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
+
 import io.nats.client.Connection;
 import io.nats.client.ConnectionListener;
 import io.nats.client.Dispatcher;
@@ -13,16 +20,9 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
 import tech.pegasys.net.api.model.payload.TransactionPayload;
 import tech.pegasys.net.api.service.ChainFiller;
-import tech.pegasys.net.api.service.TransactionSigner;
+import tech.pegasys.net.api.service.transaction.TransactionSigner;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 import tech.pegasys.net.util.RandomUtils;
-
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
 
 public class NatsFuzzer {
   private final ChainFiller chainFiller;

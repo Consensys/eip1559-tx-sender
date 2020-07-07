@@ -1,9 +1,9 @@
 package tech.pegasys.net.core.report;
 
-import org.json.JSONObject;
-import tech.pegasys.net.api.service.Reporter;
-
 import java.util.concurrent.atomic.AtomicLong;
+
+import org.json.JSONObject;
+import tech.pegasys.net.api.service.metrics.Reporter;
 
 public class ReporterService implements Reporter {
   private final AtomicLong totalTransactionsSubmitted;

@@ -1,13 +1,13 @@
 package tech.pegasys.net.core.account;
 
-import tech.pegasys.net.api.model.Account;
-import tech.pegasys.net.api.model.ImmutableAccount;
-import tech.pegasys.net.api.service.AccountRepository;
-
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+
+import tech.pegasys.net.api.model.Account;
+import tech.pegasys.net.api.model.ImmutableAccount;
+import tech.pegasys.net.api.repository.AccountRepository;
 
 public class AccountRepositoryFactory {
 

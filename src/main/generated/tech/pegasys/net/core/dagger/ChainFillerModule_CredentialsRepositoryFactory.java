@@ -4,7 +4,7 @@ import dagger.internal.Factory;
 import dagger.internal.Preconditions;
 import javax.annotation.processing.Generated;
 import javax.inject.Provider;
-import tech.pegasys.net.api.service.CredentialsRepository;
+import tech.pegasys.net.api.repository.CredentialsRepository;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 
 @Generated(

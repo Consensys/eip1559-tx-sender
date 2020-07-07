@@ -1,5 +1,9 @@
 package tech.pegasys.net.core;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.schedulers.Schedulers;
 import org.immutables.value.Value;
 import org.tinylog.Logger;
@@ -10,10 +14,6 @@ import tech.pegasys.net.api.service.ChainFiller;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 import tech.pegasys.net.core.rx.TransactionConsumer;
 import tech.pegasys.net.core.rx.TransactionProducer;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 @Value.Immutable
 public abstract class RxChainFiller {

@@ -1,4 +1,4 @@
-package tech.pegasys.net.api.service;
+package tech.pegasys.net.api.service.transaction;
 
 import java.math.BigDecimal;
 

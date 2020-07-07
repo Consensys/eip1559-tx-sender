@@ -3,7 +3,7 @@ package tech.pegasys.net.core.dagger;
 import dagger.internal.Factory;
 import dagger.internal.Preconditions;
 import javax.annotation.processing.Generated;
-import tech.pegasys.net.api.service.Reporter;
+import tech.pegasys.net.api.service.metrics.Reporter;
 
 @Generated(
     value = "dagger.internal.codegen.ComponentProcessor",

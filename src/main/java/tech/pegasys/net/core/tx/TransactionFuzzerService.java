@@ -1,9 +1,9 @@
 package tech.pegasys.net.core.tx;
 
-import tech.pegasys.net.api.service.TransactionFuzzer;
-import tech.pegasys.net.util.NumberUtils;
-
 import java.math.BigDecimal;
+
+import tech.pegasys.net.api.service.transaction.TransactionFuzzer;
+import tech.pegasys.net.util.NumberUtils;
 
 public class TransactionFuzzerService implements TransactionFuzzer {
   public static final BigDecimal DEFAULT_LOWER_BOUND_ETH = BigDecimal.valueOf(1);

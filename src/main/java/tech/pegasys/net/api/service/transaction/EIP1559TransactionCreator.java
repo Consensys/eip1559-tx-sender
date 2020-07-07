@@ -1,9 +1,9 @@
-package tech.pegasys.net.api.service;
+package tech.pegasys.net.api.service.transaction;
+
+import java.math.BigInteger;
 
 import tech.pegasys.net.api.model.EIP1559Transaction;
 import tech.pegasys.net.api.model.payload.TransactionPayload;
-
-import java.math.BigInteger;
 
 public interface EIP1559TransactionCreator {
 

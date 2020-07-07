@@ -1,4 +1,6 @@
-package tech.pegasys.net.api.service;
+package tech.pegasys.net.api.service.transaction;
+
+import java.math.BigInteger;
 
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
@@ -6,8 +8,6 @@ import org.web3j.crypto.TransactionEncoder;
 import org.web3j.utils.Convert;
 import tech.pegasys.net.api.model.EIP1559Transaction;
 import tech.pegasys.net.api.model.LegacyTransaction;
-
-import java.math.BigInteger;
 
 public class TransactionSigner {
   private static final BigInteger DEFAULT_GAS_LIMIT = BigInteger.valueOf(30000);

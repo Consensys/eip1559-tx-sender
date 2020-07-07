@@ -1,8 +1,6 @@
 package tech.pegasys.net.core.contracts;
 
-import tech.pegasys.net.api.model.Contract;
-import tech.pegasys.net.api.service.ContractRepository;
-import tech.pegasys.net.util.FileUtils;
+import static java.util.Objects.requireNonNull;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -11,7 +9,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.Objects.requireNonNull;
+import tech.pegasys.net.api.model.Contract;
+import tech.pegasys.net.api.repository.ContractRepository;
+import tech.pegasys.net.util.FileUtils;
 
 public class ContractRepositoryFactory {
   private static final String CONTRACTS_FILE_EXTENSION = ".contract";

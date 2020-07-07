@@ -1,9 +1,9 @@
-package tech.pegasys.net.api.service;
+package tech.pegasys.net.api.repository;
+
+import java.util.stream.Stream;
 
 import tech.pegasys.net.api.model.Contract;
 import tech.pegasys.net.api.model.ImmutableContract;
-
-import java.util.stream.Stream;
 
 public interface ContractRepository {
 

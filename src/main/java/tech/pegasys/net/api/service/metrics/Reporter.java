@@ -1,4 +1,4 @@
-package tech.pegasys.net.api.service;
+package tech.pegasys.net.api.service.metrics;
 
 public interface Reporter {
 

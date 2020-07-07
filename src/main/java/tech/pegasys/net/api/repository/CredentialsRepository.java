@@ -1,9 +1,9 @@
-package tech.pegasys.net.api.service;
-
-import org.web3j.crypto.Credentials;
+package tech.pegasys.net.api.repository;
 
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import org.web3j.crypto.Credentials;
 
 public interface CredentialsRepository {
 

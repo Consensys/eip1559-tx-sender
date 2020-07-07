@@ -1,12 +1,12 @@
 package tech.pegasys.net.cli;
 
+import java.util.Arrays;
+import java.util.List;
+
 import picocli.CommandLine.Option;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 import tech.pegasys.net.config.FillerMode;
 import tech.pegasys.net.config.ImmutableChainFillerConfiguration;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class Options {
   private static Options instance = new Options();
@@ -125,7 +125,7 @@ public class Options {
     return instance;
   }
 
-  public ChainFillerConfiguration toTxSenderConfiguration() {
+  public ChainFillerConfiguration toChainFillerConfiguration() {
     return ImmutableChainFillerConfiguration.builder()
         .fillerMode(fillerMode)
         .addAllRpcEndpoints(rpcEndpoints)

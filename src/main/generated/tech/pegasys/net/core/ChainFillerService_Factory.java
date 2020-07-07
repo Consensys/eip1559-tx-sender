@@ -3,12 +3,12 @@ package tech.pegasys.net.core;
 import dagger.internal.Factory;
 import javax.annotation.processing.Generated;
 import javax.inject.Provider;
-import tech.pegasys.net.api.service.AccountRepository;
-import tech.pegasys.net.api.service.ContractRepository;
-import tech.pegasys.net.api.service.CredentialsRepository;
-import tech.pegasys.net.api.service.EIP1559TransactionCreator;
-import tech.pegasys.net.api.service.LegacyTransactionCreator;
-import tech.pegasys.net.api.service.Reporter;
+import tech.pegasys.net.api.repository.AccountRepository;
+import tech.pegasys.net.api.repository.ContractRepository;
+import tech.pegasys.net.api.repository.CredentialsRepository;
+import tech.pegasys.net.api.service.transaction.EIP1559TransactionCreator;
+import tech.pegasys.net.api.service.transaction.LegacyTransactionCreator;
+import tech.pegasys.net.api.service.metrics.Reporter;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 
 @Generated(

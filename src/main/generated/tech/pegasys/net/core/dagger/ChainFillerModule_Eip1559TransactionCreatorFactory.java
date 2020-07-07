@@ -4,9 +4,9 @@ import dagger.internal.Factory;
 import dagger.internal.Preconditions;
 import javax.annotation.processing.Generated;
 import javax.inject.Provider;
-import tech.pegasys.net.api.service.AccountRepository;
-import tech.pegasys.net.api.service.EIP1559TransactionCreator;
-import tech.pegasys.net.api.service.TransactionFuzzer;
+import tech.pegasys.net.api.repository.AccountRepository;
+import tech.pegasys.net.api.service.transaction.EIP1559TransactionCreator;
+import tech.pegasys.net.api.service.transaction.TransactionFuzzer;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 
 @Generated(

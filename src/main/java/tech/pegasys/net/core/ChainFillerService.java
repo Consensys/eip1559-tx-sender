@@ -67,14 +67,7 @@ public class ChainFillerService implements ChainFiller {
               .start();
           break;
         case EXTERNAL_FUZZER_NATS:
-          final Future<Boolean> natsFuzzerJob =
-              new NatsFuzzer(
-                      Executors.newSingleThreadExecutor(),
-                      this,
-                      configuration.natsURL(),
-                      configuration.natsAsyncConnection(),
-                      configuration.natsFuzzerTopicTransactions())
-                  .start();
+          final Future<Boolean> natsFuzzerJob = new NatsFuzzer(this, configuration).start();
           while (!natsFuzzerJob.isDone()) {
             Thread.sleep(1000);
           }

@@ -1,6 +1,7 @@
 package tech.pegasys.net.api.model.payload;
 
 import com.google.gson.Gson;
+import tech.pegasys.net.api.model.TransactionType;
 
 import java.math.BigInteger;
 
@@ -84,6 +85,10 @@ public class TransactionPayload {
 
   public void setFeeCap(BigInteger feeCap) {
     this.feeCap = feeCap;
+  }
+
+  public TransactionType type() {
+    return gasPremium != null && feeCap != null ? TransactionType.EIP1559 : TransactionType.LEGACY;
   }
 
   /*public static void main(final String[] args) {

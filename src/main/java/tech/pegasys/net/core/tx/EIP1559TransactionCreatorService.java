@@ -3,11 +3,13 @@ package tech.pegasys.net.core.tx;
 import tech.pegasys.net.api.model.Account;
 import tech.pegasys.net.api.model.EIP1559Transaction;
 import tech.pegasys.net.api.model.ImmutableEIP1559Transaction;
+import tech.pegasys.net.api.model.payload.TransactionPayload;
 import tech.pegasys.net.api.service.AccountRepository;
 import tech.pegasys.net.api.service.EIP1559TransactionCreator;
 import tech.pegasys.net.api.service.TransactionFuzzer;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 public class EIP1559TransactionCreatorService implements EIP1559TransactionCreator {
@@ -25,7 +27,20 @@ public class EIP1559TransactionCreatorService implements EIP1559TransactionCreat
   }
 
   @Override
-  public EIP1559Transaction create(final BigInteger nonce) {
+  public EIP1559Transaction create(final TransactionPayload transactionPayload) {
+    final Account recipient = accountRepository.random();
+    return ImmutableEIP1559Transaction.builder()
+        .nonce(BigInteger.valueOf(transactionPayload.getNonce()))
+        .recipientAddress(recipient.address())
+        .value(new BigDecimal(transactionPayload.getValue()))
+        .gasPremium(transactionPayload.getGasPremium())
+        .feeCap(transactionPayload.getFeeCap())
+        .build();
+  }
+
+  @Override
+  public EIP1559Transaction create(
+      final BigInteger nonce, final BigInteger gasPremium, final BigInteger feeCap) {
     final Account recipient = accountRepository.random();
     return ImmutableEIP1559Transaction.builder()
         .nonce(nonce)
@@ -34,8 +49,8 @@ public class EIP1559TransactionCreatorService implements EIP1559TransactionCreat
             transactionFuzzer.value(
                 configuration.fuzzTransferValueLowerBoundEth(),
                 configuration.fuzzTransferValueUpperBoundEth()))
-        .gasPremium(BigInteger.valueOf(2000001529))
-        .feeCap(BigInteger.valueOf(999999999))
+        .gasPremium(gasPremium)
+        .feeCap(feeCap)
         .build();
   }
 }

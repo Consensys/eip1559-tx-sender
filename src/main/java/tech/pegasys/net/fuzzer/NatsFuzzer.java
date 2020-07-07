@@ -7,41 +7,53 @@ import io.nats.client.Message;
 import io.nats.client.Nats;
 import io.nats.client.Options;
 import org.tinylog.Logger;
+import org.web3j.crypto.Credentials;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.http.HttpService;
+import org.web3j.utils.Numeric;
 import tech.pegasys.net.api.model.payload.TransactionPayload;
 import tech.pegasys.net.api.service.ChainFiller;
+import tech.pegasys.net.api.service.TransactionSigner;
+import tech.pegasys.net.config.ChainFillerConfiguration;
+import tech.pegasys.net.util.RandomUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 public class NatsFuzzer {
-
-  private final ExecutorService executor;
   private final ChainFiller chainFiller;
-  private final String url;
-  private final boolean asyncConnection;
-  private final String transactionsTopic;
+  private final ChainFillerConfiguration configuration;;
+  private final ExecutorService executor;
+  private final List<Credentials> credentialsStore;
+  private final List<Web3j> web3s;
   private Connection nc;
   private boolean done = false;
 
-  public NatsFuzzer(
-      final ExecutorService executor,
-      final ChainFiller chainFiller,
-      final String url,
-      final boolean asyncConnection,
-      final String transactionsTopic) {
-    this.executor = executor;
+  public NatsFuzzer(final ChainFiller chainFiller, final ChainFillerConfiguration configuration) {
     this.chainFiller = chainFiller;
-    this.asyncConnection = asyncConnection;
-    this.transactionsTopic = transactionsTopic;
+    this.configuration = configuration;
     try {
-      this.url = url;
-      if (asyncConnection) {
+      executor = Executors.newFixedThreadPool(configuration.numThreads());
+      this.credentialsStore =
+          chainFiller.credentialsRepository().all().collect(Collectors.toUnmodifiableList());
+      this.web3s =
+          configuration.rpcEndpoints().stream()
+              .map(HttpService::new)
+              .map(Web3j::build)
+              .collect(Collectors.toUnmodifiableList());
+      if (configuration.natsAsyncConnection()) {
         Nats.connectAsynchronously(
-            new Options.Builder().server(url).connectionListener(this::handleConnection).build(),
+            new Options.Builder()
+                .server(configuration.natsURL())
+                .connectionListener(this::handleConnection)
+                .build(),
             true);
       } else {
-        nc = Nats.connect(url);
+        nc = Nats.connect(configuration.natsURL());
         onConnected();
       }
     } catch (final Exception e) {
@@ -49,13 +61,23 @@ public class NatsFuzzer {
     }
   }
 
+  public static void main(String[] args) {
+    try {
+      final Connection nc = Nats.connect("nats://127.0.0.1:4222");
+      final String message = "{\"nonce\":1,\"value\":10,\"gasPrice\":21000}";
+      nc.publish("fuzz.transactions", message.getBytes(StandardCharsets.UTF_8));
+    } catch (final Exception e) {
+      System.err.println(e.getMessage());
+    }
+  }
+
   public void handleConnection(final Connection nc, final ConnectionListener.Events type) {
     switch (type) {
       case CLOSED:
-        Logger.error("cannot connect to NATS: closed");
+        Logger.error("cannot connect to nats: closed");
         break;
       case DISCONNECTED:
-        Logger.error("cannot connect to NATS: disconnected");
+        Logger.error("cannot connect to nats: disconnected");
         break;
       case CONNECTED:
         onConnected();
@@ -64,36 +86,61 @@ public class NatsFuzzer {
   }
 
   private void onConnected() {
-    Logger.debug("connected to NATS.");
+    Logger.debug("connected to nats.");
     final Dispatcher transactionDispatcher = nc.createDispatcher(this::onTransactionsMessage);
-    transactionDispatcher.subscribe(transactionsTopic);
+    transactionDispatcher.subscribe(configuration.natsFuzzerTopicTransactions());
   }
 
   public Future<Boolean> start() {
-    return executor.submit(
-        () -> {
-          while (!done) {
-            // Logger.trace("Waiting for incoming messages...");
-            Thread.sleep(1000);
-          }
-          return true;
-        });
+    return Executors.newSingleThreadExecutor()
+        .submit(
+            () -> {
+              while (!done) {
+                // Logger.trace("Waiting for incoming messages...");
+                Thread.sleep(1000);
+              }
+              return true;
+            });
   }
 
   private void onTransactionsMessage(final Message msg) {
     final String messageString = new String(msg.getData(), StandardCharsets.UTF_8);
-    Logger.debug("received message on transactions topic: {}", messageString);
-    final TransactionPayload transactionPayload = TransactionPayload.from(messageString);
-    System.out.println(transactionPayload.toString());
+    executor.submit(
+        () ->
+            processTransactionPayload(
+                TransactionPayload.from(messageString), RandomUtils.pickRandom(credentialsStore)));
   }
 
-  /*public static void main(String[] args) {
-    try {
-      final Connection nc = Nats.connect("nats://127.0.0.1:4222");
-      final String message = "{\"nonce\":3,\"value\":1000000000000000000,\"gasPrice\":21000}";
-      nc.publish("fuzz.transactions", message.getBytes(StandardCharsets.UTF_8));
-    } catch (final Exception e) {
-      System.err.println(e.getMessage());
+  private void processTransactionPayload(
+      final TransactionPayload transactionPayload, final Credentials credentials) {
+    final byte[] signedMessage;
+    final Runnable successAction;
+    final Runnable errorAction;
+    switch (transactionPayload.type()) {
+      case EIP1559:
+        signedMessage =
+            TransactionSigner.sign(
+                chainFiller.eip1559TransactionCreator().create(transactionPayload), credentials);
+        successAction = chainFiller.reporter()::incEIP1559Transactions;
+        errorAction = chainFiller.reporter()::incEIP1559TransactionsError;
+        break;
+      case LEGACY:
+      default:
+        signedMessage =
+            TransactionSigner.sign(
+                chainFiller.legacyTransactionCreator().create(transactionPayload), credentials);
+        successAction = chainFiller.reporter()::incLegacyTransactions;
+        errorAction = chainFiller.reporter()::incLegacyTransactionsError;
+        break;
     }
-  }*/
+    try {
+      RandomUtils.pickRandom(web3s)
+          .ethSendRawTransaction(Numeric.toHexString(signedMessage))
+          .send();
+      successAction.run();
+    } catch (final Exception e) {
+      Logger.error(e, "error sending transaction");
+      errorAction.run();
+    }
+  }
 }

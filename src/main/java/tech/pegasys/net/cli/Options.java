@@ -1,12 +1,20 @@
 package tech.pegasys.net.cli;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import org.tinylog.Logger;
 import picocli.CommandLine.Option;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 import tech.pegasys.net.config.FillerMode;
 import tech.pegasys.net.config.ImmutableChainFillerConfiguration;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class Options {
   private static Options instance = new Options();
@@ -126,13 +134,32 @@ public class Options {
       paramLabel = "<path>",
       arity = "1",
       description = "Location of genesis file. (default: ${DEFAULT-VALUE})")
-  private String genesisFile = "";
+  private String genesisFile = null;
 
   public static Options getInstance() {
     return instance;
   }
 
   public ChainFillerConfiguration toChainFillerConfiguration() {
+    try {
+
+      if (genesisFile != null) {
+        final Path genesisPath = Paths.get(genesisFile);
+        final DocumentContext documentContext = JsonPath.parse(genesisPath.toUri().toURL());
+        final Map<String, Map<String, String>> alloc = documentContext.read("$.alloc");
+        accountPrivateKeys = new ArrayList<>();
+        recipientAddresses = new ArrayList<>();
+        alloc.forEach(
+            (address, account) -> {
+              recipientAddresses.add(address);
+              if (account.containsKey("privateKey")) {
+                accountPrivateKeys.add(account.get("privateKey"));
+              }
+            });
+      }
+    } catch (final IOException e) {
+      Logger.error(e);
+    }
     return ImmutableChainFillerConfiguration.builder()
         .fillerMode(fillerMode)
         .addAllRpcEndpoints(rpcEndpoints)

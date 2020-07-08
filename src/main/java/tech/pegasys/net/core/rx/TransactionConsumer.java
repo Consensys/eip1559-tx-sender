@@ -6,11 +6,16 @@ import org.web3j.protocol.Web3j;
 import org.web3j.utils.Numeric;
 import tech.pegasys.net.api.model.SignedTransaction;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class TransactionConsumer extends DefaultSubscriber<SignedTransaction> {
   private final Web3j web3;
+  private final ExecutorService executorService;
 
   public TransactionConsumer(final Web3j web3) {
     this.web3 = web3;
+    executorService = Executors.newFixedThreadPool(4);
   }
 
   @Override
@@ -20,6 +25,7 @@ public class TransactionConsumer extends DefaultSubscriber<SignedTransaction> {
 
   @Override
   public void onNext(final SignedTransaction signedTransaction) {
+    //executorService.submit(() -> submit(signedTransaction));
     submit(signedTransaction);
     request(1);
   }

@@ -1,8 +1,5 @@
 package tech.pegasys.net.core.rx;
 
-import java.math.BigInteger;
-import java.util.concurrent.atomic.AtomicLong;
-
 import io.reactivex.Flowable;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -14,6 +11,9 @@ import tech.pegasys.net.api.model.ImmutableSignedTransaction;
 import tech.pegasys.net.api.model.SignedTransaction;
 import tech.pegasys.net.api.service.ChainFiller;
 import tech.pegasys.net.api.service.transaction.TransactionSigner;
+
+import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class TransactionProducer extends Flowable<SignedTransaction> {
   private final ChainFiller chainFiller;
@@ -81,13 +81,23 @@ public class TransactionProducer extends Flowable<SignedTransaction> {
   }
 
   private SignedTransaction generateSignedTransaction() {
-    return ImmutableSignedTransaction.builder()
-        .signedMessage(
-            TransactionSigner.sign(
-                chainFiller
-                    .legacyTransactionCreator()
-                    .create(BigInteger.valueOf(nonce.getAndIncrement()), initialGasPrice),
-                credentials))
-        .build();
+    final long r = System.currentTimeMillis();
+    final byte[] signedMessage;
+    if (r % 2 == 0) {
+      signedMessage =
+          TransactionSigner.sign(
+              chainFiller
+                  .eip1559TransactionCreator()
+                  .create(BigInteger.valueOf(nonce.getAndIncrement())),
+              credentials);
+    } else {
+      signedMessage =
+          TransactionSigner.sign(
+              chainFiller
+                  .legacyTransactionCreator()
+                  .create(BigInteger.valueOf(nonce.getAndIncrement()), initialGasPrice),
+              credentials);
+    }
+    return ImmutableSignedTransaction.builder().signedMessage(signedMessage).build();
   }
 }

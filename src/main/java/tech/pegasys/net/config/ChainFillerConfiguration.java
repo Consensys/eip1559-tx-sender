@@ -35,4 +35,6 @@ public interface ChainFillerConfiguration {
   boolean natsAsyncConnection();
 
   String natsFuzzerTopicTransactions();
+
+  String genesisFile();
 }

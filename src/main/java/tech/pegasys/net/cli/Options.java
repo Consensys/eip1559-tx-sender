@@ -121,6 +121,13 @@ public class Options {
       description = "NATS fuzzer transaction topic. (default: ${DEFAULT-VALUE})")
   private String natsFuzzerTopicTransactions = "fuzz.transactions";
 
+  @Option(
+      names = {"--genesis-file"},
+      paramLabel = "<path>",
+      arity = "1",
+      description = "Location of genesis file. (default: ${DEFAULT-VALUE})")
+  private String genesisFile = "";
+
   public static Options getInstance() {
     return instance;
   }
@@ -142,6 +149,7 @@ public class Options {
         .natsURL(natsURL)
         .natsAsyncConnection(natsAsyncConnection)
         .natsFuzzerTopicTransactions(natsFuzzerTopicTransactions)
+        .genesisFile(genesisFile)
         .build();
   }
 }

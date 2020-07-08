@@ -16,6 +16,7 @@ import io.nats.client.Options;
 import org.tinylog.Logger;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Numeric;
 import tech.pegasys.net.api.model.payload.TransactionPayload;
@@ -63,7 +64,7 @@ public class NatsFuzzer {
 
   public static void main(String[] args) {
     try {
-      final Connection nc = Nats.connect("nats://127.0.0.1:4222");
+      final Connection nc = Nats.connect("nats://3.22.223.170:4222");
       final String message = "{\"nonce\":1,\"value\":10,\"gasPrice\":21000}";
       nc.publish("fuzz.transactions", message.getBytes(StandardCharsets.UTF_8));
     } catch (final Exception e) {
@@ -134,9 +135,10 @@ public class NatsFuzzer {
         break;
     }
     try {
-      RandomUtils.pickRandom(web3s)
-          .ethSendRawTransaction(Numeric.toHexString(signedMessage))
-          .send();
+      final EthSendTransaction ethSendTransaction = RandomUtils.pickRandom(web3s)
+              .ethSendRawTransaction(Numeric.toHexString(signedMessage))
+              .send();
+      System.out.println(ethSendTransaction.getTransactionHash());
       successAction.run();
     } catch (final Exception e) {
       Logger.error(e, "error sending transaction");

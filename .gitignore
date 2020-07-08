@@ -6,3 +6,5 @@ build
 out
 
 .idea
+
+src/main/generated

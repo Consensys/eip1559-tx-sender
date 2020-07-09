@@ -1,9 +1,5 @@
 package tech.pegasys.net.core;
 
-import java.math.BigInteger;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.IntStream;
-
 import org.tinylog.Logger;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -15,6 +11,10 @@ import tech.pegasys.net.api.model.LegacyTransaction;
 import tech.pegasys.net.api.service.ChainFiller;
 import tech.pegasys.net.api.service.transaction.TransactionSigner;
 import tech.pegasys.net.util.EthereumUtils;
+
+import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.IntStream;
 
 public class ChainFillerTask implements Runnable {
   private final ChainFiller chainFiller;
@@ -83,6 +83,7 @@ public class ChainFillerTask implements Runnable {
         rpcEndpoint,
         credentials.getAddress());
     IntStream.range(0, numSmartContracts).forEach(__ -> deploySmartContract());
+    System.out.println(chainFiller.reporter().report());
   }
 
   private void sendLegacyTransaction() {

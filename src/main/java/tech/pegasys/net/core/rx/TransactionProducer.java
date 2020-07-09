@@ -1,5 +1,8 @@
 package tech.pegasys.net.core.rx;
 
+import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
 import io.reactivex.Flowable;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -11,9 +14,6 @@ import tech.pegasys.net.api.model.ImmutableSignedTransaction;
 import tech.pegasys.net.api.model.SignedTransaction;
 import tech.pegasys.net.api.service.ChainFiller;
 import tech.pegasys.net.api.service.transaction.TransactionSigner;
-
-import java.math.BigInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class TransactionProducer extends Flowable<SignedTransaction> {
   private final ChainFiller chainFiller;

@@ -1,13 +1,5 @@
 package tech.pegasys.net.cli;
 
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import org.tinylog.Logger;
-import picocli.CommandLine.Option;
-import tech.pegasys.net.config.ChainFillerConfiguration;
-import tech.pegasys.net.config.FillerMode;
-import tech.pegasys.net.config.ImmutableChainFillerConfiguration;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,6 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import org.tinylog.Logger;
+import picocli.CommandLine.Option;
+import tech.pegasys.net.config.ChainFillerConfiguration;
+import tech.pegasys.net.config.FillerMode;
+import tech.pegasys.net.config.ImmutableChainFillerConfiguration;
 
 public class Options {
   private static Options instance = new Options();

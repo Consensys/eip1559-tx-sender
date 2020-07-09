@@ -1,5 +1,6 @@
 package tech.pegasys.net.core;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -7,6 +8,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
+import com.google.common.collect.Lists;
 import org.tinylog.Logger;
 import tech.pegasys.net.api.repository.AccountRepository;
 import tech.pegasys.net.api.repository.ContractRepository;
@@ -56,7 +58,10 @@ public class ChainFillerService implements ChainFiller {
           final ScheduledFuture<?> scheduledFuture =
               Executors.newScheduledThreadPool(1)
                   .scheduleAtFixedRate(
-                      this::process, 0, configuration.repeatEveryNSeconds(), TimeUnit.SECONDS);
+                      this::processSplitAccounts,
+                      0,
+                      configuration.repeatEveryNSeconds(),
+                      TimeUnit.SECONDS);
           scheduledFuture.get(1, TimeUnit.DAYS);
           break;
         case CONTINUOUS:
@@ -108,6 +113,43 @@ public class ChainFillerService implements ChainFiller {
                                       legacyTxs,
                                       eip1559Txs,
                                       configuration.numSmartContracts()))));
+      executorService.shutdown();
+      executorService.awaitTermination(1, TimeUnit.DAYS);
+    } catch (final Exception e) {
+      Logger.error(e, "chain-filler error occurred");
+    }
+  }
+
+  private void processSplitAccounts() {
+    try {
+      final ExecutorService executorService =
+          Executors.newFixedThreadPool(configuration.numThreads());
+      final int eip1559Txs =
+          (int) Math.ceil(configuration.numTransactions() * configuration.eip1559TxWeight());
+      final int legacyTxs = configuration.numTransactions() - eip1559Txs;
+
+      final List<String> rpcEndpoints = configuration.rpcEndpoints();
+
+      final List<List<String>> privateKeysPartitions =
+          Lists.partition(
+              configuration.accountPrivateKeys(),
+              configuration.accountPrivateKeys().size() / rpcEndpoints.size());
+      for (int i = 0; i < rpcEndpoints.size(); i++) {
+        final List<String> privateKeysPartition = privateKeysPartitions.get(i);
+        final String rpcEndpoint = rpcEndpoints.get(i);
+        Logger.debug(
+            "partitioning {} private keys to node {}", privateKeysPartition.size(), rpcEndpoint);
+        privateKeysPartition.forEach(
+            accountPrivateKey ->
+                executorService.submit(
+                    new ChainFillerTask(
+                        this,
+                        rpcEndpoint,
+                        accountPrivateKey,
+                        legacyTxs,
+                        eip1559Txs,
+                        configuration.numSmartContracts())));
+      }
       executorService.shutdown();
       executorService.awaitTermination(1, TimeUnit.DAYS);
     } catch (final Exception e) {

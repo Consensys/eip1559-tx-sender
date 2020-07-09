@@ -1,13 +1,13 @@
 package tech.pegasys.net.core.rx;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import io.reactivex.subscribers.DefaultSubscriber;
 import org.tinylog.Logger;
 import org.web3j.protocol.Web3j;
 import org.web3j.utils.Numeric;
 import tech.pegasys.net.api.model.SignedTransaction;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class TransactionConsumer extends DefaultSubscriber<SignedTransaction> {
   private final Web3j web3;
@@ -25,7 +25,7 @@ public class TransactionConsumer extends DefaultSubscriber<SignedTransaction> {
 
   @Override
   public void onNext(final SignedTransaction signedTransaction) {
-    //executorService.submit(() -> submit(signedTransaction));
+    // executorService.submit(() -> submit(signedTransaction));
     submit(signedTransaction);
     request(1);
   }

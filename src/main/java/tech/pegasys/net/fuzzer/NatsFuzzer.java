@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.Lists;
 import io.nats.client.Connection;
 import io.nats.client.ConnectionListener;
 import io.nats.client.Dispatcher;
@@ -64,9 +65,14 @@ public class NatsFuzzer {
 
   public static void main(String[] args) {
     try {
-      final Connection nc = Nats.connect("nats://3.22.223.170:4222");
+      /*final Connection nc = Nats.connect("nats://3.22.223.170:4222");
       final String message = "{\"nonce\":1,\"value\":10,\"gasPrice\":21000}";
-      nc.publish("fuzz.transactions", message.getBytes(StandardCharsets.UTF_8));
+      nc.publish("fuzz.transactions", message.getBytes(StandardCharsets.UTF_8));*/
+      List<Integer> intList = Lists.newArrayList(1, 2, 3, 4, 5, 6, 7, 8);
+      List<List<Integer>> subSets = Lists.partition(intList, 5);
+
+      List<Integer> lastPartition = subSets.get(2);
+
     } catch (final Exception e) {
       System.err.println(e.getMessage());
     }
@@ -135,7 +141,8 @@ public class NatsFuzzer {
         break;
     }
     try {
-      final EthSendTransaction ethSendTransaction = RandomUtils.pickRandom(web3s)
+      final EthSendTransaction ethSendTransaction =
+          RandomUtils.pickRandom(web3s)
               .ethSendRawTransaction(Numeric.toHexString(signedMessage))
               .send();
       System.out.println(ethSendTransaction.getTransactionHash());

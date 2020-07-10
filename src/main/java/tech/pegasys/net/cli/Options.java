@@ -176,7 +176,6 @@ public class Options {
         .natsURL(natsURL)
         .natsAsyncConnection(natsAsyncConnection)
         .natsFuzzerTopicTransactions(natsFuzzerTopicTransactions)
-        .genesisFile(genesisFile)
         .build();
   }
 }

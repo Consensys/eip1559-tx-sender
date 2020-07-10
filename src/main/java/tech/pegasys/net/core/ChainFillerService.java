@@ -34,7 +34,7 @@ public class ChainFillerService implements ChainFiller {
   private final EIP1559TransactionCreator eip1559TransactionCreator;
   private final Reporter reporter;
   final ExecutorService executor;
-  private List<ActionableAccount> accounts;
+  private final List<ActionableAccount> accounts;
 
   @Inject
   public ChainFillerService(
@@ -97,37 +97,28 @@ public class ChainFillerService implements ChainFiller {
     }
   }
 
-  private void prepareAccounts() throws InterruptedException {
+  private void prepareAccounts() {
     Logger.debug("preparing accounts");
     final List<String> rpcEndpoints = configuration.rpcEndpoints();
-    final ExecutorService accountsPreparationExecutor =
-        Executors.newFixedThreadPool(rpcEndpoints.size());
     final List<List<String>> privateKeysPartitions =
         Lists.partition(
             configuration.accountPrivateKeys(),
             configuration.accountPrivateKeys().size() / rpcEndpoints.size());
     for (int i = 0; i < rpcEndpoints.size(); i++) {
-      final int index = i;
-      accountsPreparationExecutor.submit(
-          () -> {
-            final String rpcEndpoint = rpcEndpoints.get(index);
-            Logger.debug("loading accounts parameters from node {}", rpcEndpoint);
-            final List<String> privateKeysPartition = privateKeysPartitions.get(index);
-            accounts.addAll(
-                privateKeysPartition.stream()
-                    .map(
-                        privateKey ->
-                            new ActionableAccount(Credentials.create(privateKey), rpcEndpoint)
-                                .updated())
-                    .collect(Collectors.toList()));
-            Logger.debug(
-                "{} accounts parameters successfully loaded from node {}",
-                privateKeysPartition.size(),
-                rpcEndpoint);
-          });
+      final String rpcEndpoint = rpcEndpoints.get(i);
+      Logger.debug("loading accounts parameters from node {}", rpcEndpoint);
+      final List<String> privateKeysPartition = privateKeysPartitions.get(i);
+      accounts.addAll(
+          privateKeysPartition.stream()
+              .map(
+                  privateKey ->
+                      new ActionableAccount(Credentials.create(privateKey), rpcEndpoint).updated())
+              .collect(Collectors.toList()));
+      Logger.debug(
+          "{} accounts parameters successfully loaded from node {}",
+          privateKeysPartition.size(),
+          rpcEndpoint);
     }
-    accountsPreparationExecutor.shutdown();
-    accountsPreparationExecutor.awaitTermination(10, TimeUnit.MINUTES);
     accounts.forEach(System.out::println);
     Logger.debug("accounts prepared");
   }
@@ -140,18 +131,16 @@ public class ChainFillerService implements ChainFiller {
           (int) Math.ceil(configuration.numTransactions() * configuration.eip1559TxWeight());
       final int legacyTxs = configuration.numTransactions() - eip1559Txs;
       final ChainFiller chainFiller = this;
-      accounts
-          .parallelStream()
-          .forEach(
-              actionableAccount ->
-                  executorService.submit(
-                      () ->
-                          AccountProcessorService.process(
-                              chainFiller,
-                              actionableAccount,
-                              legacyTxs,
-                              eip1559Txs,
-                              configuration.numSmartContracts())));
+      accounts.forEach(
+          actionableAccount ->
+              executorService.submit(
+                  () ->
+                      AccountProcessorService.process(
+                          chainFiller,
+                          actionableAccount,
+                          legacyTxs,
+                          eip1559Txs,
+                          configuration.numSmartContracts())));
       executorService.shutdown();
       executorService.awaitTermination(1, TimeUnit.DAYS);
       System.out.println(chainFiller.reporter().report());

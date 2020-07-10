@@ -77,12 +77,12 @@ public class ChainFillerTask implements Runnable {
         rpcEndpoint,
         credentials.getAddress());
     IntStream.range(0, numTransactionsEIP1559).forEach(__ -> sendEIP1559Transaction());
-    Logger.debug(
+    /*Logger.debug(
         "deploying {} contracts on node {} with account {}",
         numSmartContracts,
         rpcEndpoint,
         credentials.getAddress());
-    IntStream.range(0, numSmartContracts).forEach(__ -> deploySmartContract());
+    IntStream.range(0, numSmartContracts).forEach(__ -> deploySmartContract());*/
     System.out.println(chainFiller.reporter().report());
   }
 

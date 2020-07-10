@@ -1,6 +1,7 @@
 package tech.pegasys.net.core.account;
 
 import org.tinylog.Logger;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.utils.Numeric;
 import tech.pegasys.net.api.model.ActionableAccount;
 import tech.pegasys.net.api.model.EIP1559Transaction;
@@ -19,19 +20,20 @@ public class AccountProcessorService {
       final int legacyTx,
       final int eip1559Tx,
       final int smartContracts) {
-    //Logger.debug("start processing account: {}", actionableAccount.updated().toString());
+    // Logger.debug("start processing account: {}", actionableAccount.updated().toString());
     IntStream.range(0, legacyTx)
         .forEach(__ -> sendLegacyTransaction(chainFiller, actionableAccount));
     IntStream.range(0, eip1559Tx)
         .forEach(__ -> sendEIP1559Transaction(chainFiller, actionableAccount));
     IntStream.range(0, smartContracts)
         .forEach(__ -> deploySmartContract(chainFiller, actionableAccount));
-    //Logger.debug("completed processing account: {}", actionableAccount.updated().toString());
+    // Logger.debug("completed processing account: {}", actionableAccount.updated().toString());
   }
 
   private static void sendLegacyTransaction(
       final ChainFiller chainFiller, final ActionableAccount account) {
     try {
+      Logger.debug("sending legacy transaction");
       final LegacyTransaction legacyTransaction =
           chainFiller
               .legacyTransactionCreator()
@@ -39,7 +41,9 @@ public class AccountProcessorService {
                   BigInteger.valueOf(account.getNonce().getAndIncrement()), account.getGasPrice());
       final byte[] signedMessage =
           TransactionSigner.sign(legacyTransaction, account.getCredentials());
-      account.getWeb3().ethSendRawTransaction(Numeric.toHexString(signedMessage)).send();
+      final EthSendTransaction ethSendTransactionResponse =
+          account.getWeb3().ethSendRawTransaction(Numeric.toHexString(signedMessage)).send();
+      Logger.debug("transaction sent: {}", ethSendTransactionResponse.getTransactionHash());
       chainFiller.reporter().incLegacyTransactions();
     } catch (final Exception e) {
       Logger.error(e, "error sending legacy transaction");
@@ -50,13 +54,18 @@ public class AccountProcessorService {
   private static void sendEIP1559Transaction(
       final ChainFiller chainFiller, final ActionableAccount account) {
     try {
+      Logger.debug("sending eip1559 transaction");
+
       final EIP1559Transaction eip1559Transaction =
           chainFiller
               .eip1559TransactionCreator()
               .create(BigInteger.valueOf(account.getNonce().getAndIncrement()));
       final byte[] signedMessage =
           TransactionSigner.sign(eip1559Transaction, account.getCredentials());
-      account.getWeb3().ethSendRawTransaction(Numeric.toHexString(signedMessage)).send();
+      final EthSendTransaction ethSendTransactionResponse =
+          account.getWeb3().ethSendRawTransaction(Numeric.toHexString(signedMessage)).send();
+      Logger.debug("transaction sent: {}", ethSendTransactionResponse.getTransactionHash());
+
       chainFiller.reporter().incEIP1559Transactions();
     } catch (final Exception e) {
       Logger.error(e, "error sending eip1559 transaction");

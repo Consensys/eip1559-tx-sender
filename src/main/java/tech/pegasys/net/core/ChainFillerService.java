@@ -119,7 +119,6 @@ public class ChainFillerService implements ChainFiller {
           privateKeysPartition.size(),
           rpcEndpoint);
     }
-    accounts.forEach(System.out::println);
     Logger.debug("accounts prepared");
   }
 

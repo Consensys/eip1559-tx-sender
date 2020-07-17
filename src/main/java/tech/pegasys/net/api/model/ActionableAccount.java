@@ -1,22 +1,24 @@
 package tech.pegasys.net.api.model;
 
+import java.math.BigInteger;
+import java.time.Duration;
+import java.util.concurrent.atomic.AtomicLong;
+
 import org.tinylog.Logger;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.http.HttpService;
-
-import java.math.BigInteger;
-import java.time.Duration;
-import java.util.concurrent.atomic.AtomicLong;
+import tech.pegasys.net.client.RpcClientService;
 
 public class ActionableAccount {
 
-  private static final long ACCOUNT_PARAMS_VALIDITY_MS = Duration.ofMinutes(10).toMillis();
+  private static final long ACCOUNT_PARAMS_VALIDITY_MS = Duration.ofMinutes(1).toMillis();
 
   private final Credentials credentials;
   private final String rpcEndpoint;
   private final Web3j web3;
+  private final RpcClientService rpcClient;
   private AtomicLong nonce;
   private BigInteger gasPrice;
   private long lastUpdated = 0;
@@ -25,6 +27,7 @@ public class ActionableAccount {
     this.credentials = credentials;
     this.rpcEndpoint = rpcEndpoint;
     this.web3 = Web3j.build(new HttpService(rpcEndpoint));
+    this.rpcClient = new RpcClientService(rpcEndpoint);
   }
 
   private void refreshAccountParams() {
@@ -75,6 +78,10 @@ public class ActionableAccount {
 
   public Web3j getWeb3() {
     return web3;
+  }
+
+  public RpcClientService getRpcClient() {
+    return rpcClient;
   }
 
   @Override

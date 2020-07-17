@@ -4,7 +4,8 @@ public enum FillerMode {
   ONESHOT,
   SCHEDULER,
   CONTINUOUS,
-  EXTERNAL_FUZZER_NATS;
+  EXTERNAL_FUZZER_NATS,
+  BATCH_RPC;
 
   public static FillerMode fromString(final String str) {
     for (final FillerMode mode : FillerMode.values()) {

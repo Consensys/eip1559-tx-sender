@@ -1,5 +1,15 @@
 package tech.pegasys.net.core;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import org.tinylog.Logger;
 import org.web3j.crypto.Credentials;
@@ -13,17 +23,8 @@ import tech.pegasys.net.api.service.transaction.EIP1559TransactionCreator;
 import tech.pegasys.net.api.service.transaction.LegacyTransactionCreator;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 import tech.pegasys.net.core.account.AccountProcessorService;
+import tech.pegasys.net.core.batch.BatchRpcFillerService;
 import tech.pegasys.net.fuzzer.NatsFuzzer;
-
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class ChainFillerService implements ChainFiller {
   private final ChainFillerConfiguration configuration;
@@ -84,6 +85,11 @@ public class ChainFillerService implements ChainFiller {
             Thread.sleep(1000);
           }
           Logger.info("nats fuzzer job completed with status: {}", natsFuzzerJob.get());
+          break;
+        case BATCH_RPC:
+          final BatchRpcFillerService batchRpcFillerService =
+              new BatchRpcFillerService(this, configuration, accounts);
+          batchRpcFillerService.start();
           break;
         case ONESHOT:
         default:

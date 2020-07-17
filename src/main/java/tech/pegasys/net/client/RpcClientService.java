@@ -1,6 +1,7 @@
 package tech.pegasys.net.client;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 import okhttp3.MediaType;
@@ -8,6 +9,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import tech.pegasys.net.api.service.rpc.RpcClient;
 
 public class RpcClientService implements RpcClient {
@@ -35,5 +38,16 @@ public class RpcClientService implements RpcClient {
     } else {
       throw new IOException("error calling rpc method");
     }
+  }
+
+  @Override
+  public void ethBatchSendRawTransaction(final List<String> transactions) throws IOException {
+    call(
+        new JSONObject()
+            .put("jsonrpc", "2.0")
+            .put("method", "eth_batchSendRawTransaction")
+            .put("params", new JSONArray(transactions))
+            .put("id", 1)
+            .toString());
   }
 }

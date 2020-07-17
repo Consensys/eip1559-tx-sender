@@ -1,5 +1,8 @@
 package tech.pegasys.net.core.account;
 
+import java.math.BigInteger;
+import java.util.stream.IntStream;
+
 import org.tinylog.Logger;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.utils.Numeric;
@@ -8,9 +11,6 @@ import tech.pegasys.net.api.model.EIP1559Transaction;
 import tech.pegasys.net.api.model.LegacyTransaction;
 import tech.pegasys.net.api.service.ChainFiller;
 import tech.pegasys.net.api.service.transaction.TransactionSigner;
-
-import java.math.BigInteger;
-import java.util.stream.IntStream;
 
 public class AccountProcessorService {
 

@@ -63,6 +63,8 @@ dependencies {
   implementation 'io.nats:jnats:2.6.8'
   implementation 'com.squareup.okhttp3:okhttp:4.7.2'
   implementation 'com.jayway.jsonpath:json-path:2.4.0'
+  implementation 'org.apache.commons:commons-math3:3.6.1'
+
 
   annotationProcessor 'com.google.dagger:dagger-compiler:2.28.1'
   annotationProcessor 'org.immutables:value:2.8.8'

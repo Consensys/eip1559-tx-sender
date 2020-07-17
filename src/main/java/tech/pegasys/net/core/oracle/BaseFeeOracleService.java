@@ -30,9 +30,8 @@ public class BaseFeeOracleService implements BaseFeeOracle {
   }
 
   private boolean needRefresh() {
-    /*return lastCachedBaseFeeAt == null
-    || lastCachedBaseFeeAt.plusSeconds(REFRESH_INTERVAL_SECONDS).compareTo(Instant.now()) <= 0;*/
-    return true;
+    return lastCachedBaseFeeAt == null
+        || lastCachedBaseFeeAt.plusSeconds(REFRESH_INTERVAL_SECONDS).compareTo(Instant.now()) <= 0;
   }
 
   private Long refreshBaseFee(final String block) {

@@ -1,13 +1,5 @@
 package tech.pegasys.net.core.batch;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
-
 import org.tinylog.Logger;
 import org.web3j.utils.Numeric;
 import tech.pegasys.net.api.model.ActionableAccount;
@@ -18,6 +10,14 @@ import tech.pegasys.net.client.RpcClientService;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 import tech.pegasys.net.util.RandomUtils;
 import tech.pegasys.net.util.TransactionTypeSelector;
+
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 public class BatchRpcFillerService {
   private final ChainFiller chainFiller;
@@ -55,9 +55,14 @@ public class BatchRpcFillerService {
   }
 
   private void doStart() {
-    Logger.info("starting {}", getClass().getSimpleName());
-    while (started.get()) {
-      generateTransaction();
+    try {
+      Logger.info("starting {}", getClass().getSimpleName());
+      while (started.get()) {
+        generateTransaction();
+        Thread.sleep(200);
+      }
+    } catch (final InterruptedException e) {
+      Logger.error(e, "error occurred while processing transactions");
     }
   }
 

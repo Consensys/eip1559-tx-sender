@@ -2,6 +2,8 @@ package tech.pegasys.net.api.service.transaction;
 
 import java.math.BigInteger;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
@@ -10,7 +12,7 @@ import tech.pegasys.net.api.model.EIP1559Transaction;
 import tech.pegasys.net.api.model.LegacyTransaction;
 
 public class TransactionSigner {
-  private static final BigInteger DEFAULT_GAS_LIMIT = BigInteger.valueOf(30000);
+  private static final BigInteger DEFAULT_GAS_LIMIT = BigInteger.valueOf(21000);
   private static final BigInteger DEFAULT_CONTRACT_GAS_LIMIT = BigInteger.valueOf(8000000);
 
   public static byte[] sign(
@@ -50,6 +52,8 @@ public class TransactionSigner {
   }
 
   public static byte[] sign(final RawTransaction rawTransaction, final Credentials credentials) {
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    System.out.println(gson.toJson(rawTransaction));
     return TransactionEncoder.signMessage(rawTransaction, credentials);
   }
 }

@@ -59,9 +59,9 @@ public class BatchRpcFillerService {
       Logger.info("starting {}", getClass().getSimpleName());
       while (started.get()) {
         generateTransaction();
-        Thread.sleep(200);
+        //Thread.sleep(200);
       }
-    } catch (final InterruptedException e) {
+    } catch (final Exception e) {
       Logger.error(e, "error occurred while processing transactions");
     }
   }

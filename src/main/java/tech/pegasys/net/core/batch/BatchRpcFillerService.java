@@ -1,5 +1,13 @@
 package tech.pegasys.net.core.batch;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
+
 import org.tinylog.Logger;
 import org.web3j.utils.Numeric;
 import tech.pegasys.net.api.model.ActionableAccount;
@@ -10,14 +18,6 @@ import tech.pegasys.net.client.RpcClientService;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 import tech.pegasys.net.util.RandomUtils;
 import tech.pegasys.net.util.TransactionTypeSelector;
-
-import java.io.IOException;
-import java.math.BigInteger;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 public class BatchRpcFillerService {
   private final ChainFiller chainFiller;

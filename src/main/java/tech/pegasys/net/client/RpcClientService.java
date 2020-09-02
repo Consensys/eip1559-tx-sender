@@ -45,7 +45,7 @@ public class RpcClientService implements RpcClient {
     call(
         new JSONObject()
             .put("jsonrpc", "2.0")
-            .put("method", "eth_batchSendRawTransaction")
+            .put("method", "debug_batchSendRawTransaction")
             .put("params", new JSONArray(transactions))
             .put("id", 1)
             .toString());

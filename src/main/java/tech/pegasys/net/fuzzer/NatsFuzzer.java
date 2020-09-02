@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Lists;
 import io.nats.client.Connection;
 import io.nats.client.ConnectionListener;
 import io.nats.client.Dispatcher;
@@ -62,7 +61,6 @@ public class NatsFuzzer {
       throw new RuntimeException(e);
     }
   }
-  
 
   public void handleConnection(final Connection nc, final ConnectionListener.Events type) {
     switch (type) {

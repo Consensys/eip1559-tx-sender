@@ -62,21 +62,7 @@ public class NatsFuzzer {
       throw new RuntimeException(e);
     }
   }
-
-  public static void main(String[] args) {
-    try {
-      /*final Connection nc = Nats.connect("nats://3.22.223.170:4222");
-      final String message = "{\"nonce\":1,\"value\":10,\"gasPrice\":21000}";
-      nc.publish("fuzz.transactions", message.getBytes(StandardCharsets.UTF_8));*/
-      List<Integer> intList = Lists.newArrayList(1, 2, 3, 4, 5, 6, 7, 8);
-      List<List<Integer>> subSets = Lists.partition(intList, 5);
-
-      List<Integer> lastPartition = subSets.get(2);
-
-    } catch (final Exception e) {
-      System.err.println(e.getMessage());
-    }
-  }
+  
 
   public void handleConnection(final Connection nc, final ConnectionListener.Events type) {
     switch (type) {

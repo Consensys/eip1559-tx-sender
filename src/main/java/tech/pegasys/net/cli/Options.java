@@ -136,6 +136,13 @@ public class Options {
       description = "Location of genesis file. (default: ${DEFAULT-VALUE})")
   private String genesisFile = null;
 
+  @Option(
+      names = {"--tx-export-file"},
+      paramLabel = "<path>",
+      arity = "1",
+      description = "Location of transaction export file. (default: ${DEFAULT-VALUE})")
+  private String transactionExportFile = null;
+
   public static Options getInstance() {
     return instance;
   }
@@ -176,6 +183,7 @@ public class Options {
         .natsURL(natsURL)
         .natsAsyncConnection(natsAsyncConnection)
         .natsFuzzerTopicTransactions(natsFuzzerTopicTransactions)
+        .transactionExportFile(transactionExportFile)
         .build();
   }
 }

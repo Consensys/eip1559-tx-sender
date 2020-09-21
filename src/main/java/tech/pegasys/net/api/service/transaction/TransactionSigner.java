@@ -53,7 +53,7 @@ public class TransactionSigner {
 
   public static byte[] sign(final RawTransaction rawTransaction, final Credentials credentials) {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    System.out.println(gson.toJson(rawTransaction));
+    // System.out.println(gson.toJson(rawTransaction));
     return TransactionEncoder.signMessage(rawTransaction, credentials);
   }
 }

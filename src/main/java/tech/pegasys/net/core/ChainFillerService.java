@@ -24,6 +24,7 @@ import tech.pegasys.net.api.service.transaction.LegacyTransactionCreator;
 import tech.pegasys.net.config.ChainFillerConfiguration;
 import tech.pegasys.net.core.account.AccountProcessorService;
 import tech.pegasys.net.core.batch.BatchRpcFillerService;
+import tech.pegasys.net.core.tx.export.TxExportService;
 import tech.pegasys.net.fuzzer.NatsFuzzer;
 
 public class ChainFillerService implements ChainFiller {
@@ -90,6 +91,9 @@ public class ChainFillerService implements ChainFiller {
           final BatchRpcFillerService batchRpcFillerService =
               new BatchRpcFillerService(this, configuration, accounts);
           batchRpcFillerService.start();
+          break;
+        case TX_EXPORT:
+          new TxExportService(this, configuration, accounts).start();
           break;
         case ONESHOT:
         default:

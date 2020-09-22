@@ -65,6 +65,10 @@ dependencies {
   implementation 'com.jayway.jsonpath:json-path:2.4.0'
   implementation 'org.apache.commons:commons-math3:3.6.1'
 
+  testImplementation 'junit:junit:4.13'
+  testImplementation 'org.assertj:assertj-core:3.16.1'
+  testImplementation 'org.mockito:mockito-core:3.3.3'
+
 
   annotationProcessor 'com.google.dagger:dagger-compiler:2.28.1'
   annotationProcessor 'org.immutables:value:2.8.8'

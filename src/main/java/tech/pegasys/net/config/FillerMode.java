@@ -5,7 +5,8 @@ public enum FillerMode {
   SCHEDULER,
   CONTINUOUS,
   EXTERNAL_FUZZER_NATS,
-  BATCH_RPC;
+  BATCH_RPC,
+  TX_EXPORT;
 
   public static FillerMode fromString(final String str) {
     for (final FillerMode mode : FillerMode.values()) {

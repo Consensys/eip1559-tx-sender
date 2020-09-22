@@ -2,8 +2,6 @@ package tech.pegasys.net.api.service.transaction;
 
 import java.math.BigInteger;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
@@ -52,8 +50,6 @@ public class TransactionSigner {
   }
 
   public static byte[] sign(final RawTransaction rawTransaction, final Credentials credentials) {
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    System.out.println(gson.toJson(rawTransaction));
     return TransactionEncoder.signMessage(rawTransaction, credentials);
   }
 }

@@ -107,7 +107,6 @@ public class TxExportService {
   private static byte[] generateLegacyTransaction(
       final ChainFiller chainFiller, final ActionableAccount account) {
     try {
-      // Logger.debug("generating legacy transaction");
       final LegacyTransaction legacyTransaction =
           chainFiller
               .legacyTransactionCreator()
@@ -124,8 +123,6 @@ public class TxExportService {
   private static byte[] generateEIP1559Transaction(
       final ChainFiller chainFiller, final ActionableAccount account) {
     try {
-      // Logger.debug("generating eip1559 transaction");
-
       final EIP1559Transaction eip1559Transaction =
           chainFiller
               .eip1559TransactionCreator()

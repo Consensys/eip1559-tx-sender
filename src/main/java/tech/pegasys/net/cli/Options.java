@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -170,8 +171,10 @@ public class Options {
     return ImmutableChainFillerConfiguration.builder()
         .fillerMode(fillerMode)
         .addAllRpcEndpoints(rpcEndpoints)
-        .addAllAccountPrivateKeys(accountPrivateKeys)
-        .addAllRecipientAddresses(recipientAddresses)
+        .addAllAccountPrivateKeys(
+            accountPrivateKeys != null ? accountPrivateKeys : Collections.emptyList())
+        .addAllRecipientAddresses(
+            recipientAddresses != null ? recipientAddresses : Collections.emptyList())
         .numThreads(numThreads)
         .numTransactions(numTransactions)
         .numSmartContracts(numSmartContracts)

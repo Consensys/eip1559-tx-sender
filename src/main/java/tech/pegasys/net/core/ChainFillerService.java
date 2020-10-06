@@ -22,9 +22,11 @@ import tech.pegasys.net.api.service.metrics.Reporter;
 import tech.pegasys.net.api.service.transaction.EIP1559TransactionCreator;
 import tech.pegasys.net.api.service.transaction.LegacyTransactionCreator;
 import tech.pegasys.net.config.ChainFillerConfiguration;
+import tech.pegasys.net.config.FillerMode;
 import tech.pegasys.net.core.account.AccountProcessorService;
 import tech.pegasys.net.core.batch.BatchRpcFillerService;
 import tech.pegasys.net.core.tx.export.TxExportService;
+import tech.pegasys.net.core.tx.tximport.TxImportService;
 import tech.pegasys.net.fuzzer.NatsFuzzer;
 
 public class ChainFillerService implements ChainFiller {
@@ -62,7 +64,9 @@ public class ChainFillerService implements ChainFiller {
   public void fill() {
     try {
       Logger.info("starting chain-filler");
-      prepareAccounts();
+      if (!FillerMode.TX_IMPORT.equals(configuration.fillerMode())) {
+        prepareAccounts();
+      }
       switch (configuration.fillerMode()) {
         case SCHEDULER:
           Logger.info(
@@ -94,6 +98,9 @@ public class ChainFillerService implements ChainFiller {
           break;
         case TX_EXPORT:
           new TxExportService(this, configuration, accounts).start();
+          break;
+        case TX_IMPORT:
+          new TxImportService(configuration).start();
           break;
         case ONESHOT:
         default:

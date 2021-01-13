@@ -17,6 +17,6 @@ public interface EIP1559TransactionCreator {
     return create(
         nonce,
         Convert.Unit.GWEI.getWeiFactor().multiply(BigDecimal.ONE).toBigInteger(),
-        BigInteger.valueOf(1999999999));
+        new BigInteger("50000000000", 10));
   }
 }

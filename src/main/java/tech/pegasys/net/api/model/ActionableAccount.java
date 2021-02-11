@@ -13,7 +13,7 @@ import tech.pegasys.net.client.RpcClientService;
 
 public class ActionableAccount {
 
-  private static final long ACCOUNT_PARAMS_VALIDITY_MS = Duration.ofMinutes(1).toMillis();
+  private static final long ACCOUNT_PARAMS_VALIDITY_MS = Duration.ofSeconds(2).toMillis();
 
   private final Credentials credentials;
   private final String rpcEndpoint;
@@ -32,6 +32,7 @@ public class ActionableAccount {
 
   private void refreshAccountParams() {
     try {
+      System.out.println("refresh params");
       this.nonce =
           new AtomicLong(
               web3.ethGetTransactionCount(
@@ -39,7 +40,8 @@ public class ActionableAccount {
                   .send()
                   .getTransactionCount()
                   .longValue());
-      this.gasPrice = web3.ethGasPrice().send().getGasPrice();
+      //this.gasPrice = web3.ethGasPrice().send().getGasPrice();
+      this.gasPrice = BigInteger.valueOf(1500000000);
     } catch (Exception e) {
       Logger.error(e, "error setting account parameters (nonce, gasPrice)");
       this.gasPrice = BigInteger.ZERO;
@@ -64,8 +66,13 @@ public class ActionableAccount {
     }
   }
 
-  public AtomicLong getNonce() {
+  public AtomicLong getNonce() throws Exception{
     return updated().nonce;
+    /*return new AtomicLong(web3.ethGetTransactionCount(
+            credentials.getAddress(), DefaultBlockParameterName.LATEST)
+            .send()
+            .getTransactionCount()
+            .longValue());*/
   }
 
   public BigInteger getGasPrice() {
@@ -84,8 +91,4 @@ public class ActionableAccount {
     return rpcClient;
   }
 
-  @Override
-  public String toString() {
-    return String.format("%s - %s - %s", rpcEndpoint, credentials.getAddress(), getNonce().get());
-  }
 }

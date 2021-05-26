@@ -30,6 +30,7 @@ public class EIP1559TransactionCreatorService implements EIP1559TransactionCreat
   public EIP1559Transaction create(final TransactionPayload transactionPayload) {
     final Account recipient = accountRepository.random();
     return ImmutableEIP1559Transaction.builder()
+        .chainId(configuration.chaindId())
         .nonce(BigInteger.valueOf(transactionPayload.getNonce()))
         .recipientAddress(recipient.address())
         .value(new BigDecimal(transactionPayload.getValue()))
@@ -43,6 +44,7 @@ public class EIP1559TransactionCreatorService implements EIP1559TransactionCreat
       final BigInteger nonce, final BigInteger gasPremium, final BigInteger feeCap) {
     final Account recipient = accountRepository.random();
     return ImmutableEIP1559Transaction.builder()
+        .chainId(configuration.chaindId())
         .nonce(nonce)
         .recipientAddress(recipient.address())
         .value(

@@ -29,6 +29,13 @@ public class Options {
   private List<String> rpcEndpoints = Arrays.asList("http://127.0.0.1:8545");
 
   @Option(
+      names = {"--chain-id"},
+      paramLabel = "<chainId>",
+      description = "Chain ID. ",
+      arity = "1")
+  private long chainId;
+
+  @Option(
       names = {"--account-private-keys"},
       paramLabel = "<privateKey>",
       description = "Comma separated Ethereum account private keys. ",
@@ -154,6 +161,7 @@ public class Options {
       if (genesisFile != null) {
         final Path genesisPath = Paths.get(genesisFile);
         final DocumentContext documentContext = JsonPath.parse(genesisPath.toUri().toURL());
+        chainId = documentContext.read("$.chainId");
         final Map<String, Map<String, String>> alloc = documentContext.read("$.alloc");
         accountPrivateKeys = new ArrayList<>();
         recipientAddresses = new ArrayList<>();
@@ -169,6 +177,7 @@ public class Options {
       Logger.error(e);
     }
     return ImmutableChainFillerConfiguration.builder()
+        .chaindId(chainId)
         .fillerMode(fillerMode)
         .addAllRpcEndpoints(rpcEndpoints)
         .addAllAccountPrivateKeys(

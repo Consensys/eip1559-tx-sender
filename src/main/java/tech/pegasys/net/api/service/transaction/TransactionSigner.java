@@ -40,6 +40,7 @@ public class TransactionSigner {
       final EIP1559Transaction eip1559Transaction, final Credentials credentials) {
     return sign(
         RawTransaction.createEtherTransaction(
+            eip1559Transaction.chainId(),
             eip1559Transaction.nonce(),
             DEFAULT_GAS_LIMIT,
             eip1559Transaction.recipientAddress(),

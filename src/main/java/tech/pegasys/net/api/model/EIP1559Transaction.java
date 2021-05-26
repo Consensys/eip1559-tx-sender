@@ -6,6 +6,9 @@ import org.immutables.value.Value;
 
 @Value.Immutable
 public abstract class EIP1559Transaction extends Transaction {
+
+  public abstract long chainId();
+
   public abstract BigInteger gasPremium();
 
   public abstract BigInteger feeCap();

@@ -91,7 +91,9 @@ public class ChainFillerTask implements Runnable {
       final LegacyTransaction legacyTransaction =
           chainFiller
               .legacyTransactionCreator()
-              .create(BigInteger.valueOf(nonce.getAndIncrement()), initialGasPrice);
+              .create(
+                  BigInteger.valueOf(nonce.getAndIncrement()),
+                  web3.ethGasPrice().send().getGasPrice());
       final byte[] signedMessage = TransactionSigner.sign(legacyTransaction, credentials);
       web3.ethSendRawTransaction(Numeric.toHexString(signedMessage)).send();
       chainFiller.reporter().incLegacyTransactions();

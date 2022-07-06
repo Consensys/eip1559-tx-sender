@@ -19,6 +19,8 @@ repositories {
   // Use jcenter for resolving dependencies.
   // You can declare any Maven/Ivy/file repository here.
   jcenter()
+  mavenLocal()
+  mavenCentral()
 }
 
 apply plugin: 'com.diffplug.gradle.spotless'
@@ -48,29 +50,29 @@ spotless {
 }
 
 dependencies {
-  implementation 'com.google.guava:guava:29.0-jre'
-  implementation 'info.picocli:picocli:4.3.2'
-  implementation 'com.google.dagger:dagger:2.28.1'
-  implementation 'org.immutables:value-annotations:2.8.8'
-  implementation 'org.web3j:core:5.0.0'
-  implementation 'org.json:json:20200518'
-  implementation 'org.apache.logging.log4j:log4j-core:2.13.3'
-  implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.13.3'
-  implementation 'org.tinylog:tinylog-api:2.1.2'
-  implementation 'org.tinylog:tinylog-impl:2.1.2'
-  implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
-  implementation 'com.google.code.gson:gson:2.8.6'
-  implementation 'io.nats:jnats:2.6.8'
-  implementation 'com.squareup.okhttp3:okhttp:4.7.2'
-  implementation 'com.jayway.jsonpath:json-path:2.4.0'
+  implementation 'com.google.guava:guava:31.1-jre'
+  implementation 'info.picocli:picocli:4.6.3'
+  implementation 'com.google.dagger:dagger:2.42'
+  implementation 'org.immutables:value-annotations:2.9.0'
+  implementation 'org.web3j:core:4.8.5'
+  implementation 'org.json:json:20220320'
+  implementation 'org.apache.logging.log4j:log4j-core:2.17.2'
+  implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.17.2'
+  implementation 'org.tinylog:tinylog-api:2.4.1'
+  implementation 'org.tinylog:tinylog-impl:2.4.1'
+  implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
+  implementation 'com.google.code.gson:gson:2.9.0'
+  implementation 'io.nats:jnats:2.15.3'
+  implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+  implementation 'com.jayway.jsonpath:json-path:2.7.0'
   implementation 'org.apache.commons:commons-math3:3.6.1'
 
-  testImplementation 'junit:junit:4.13'
-  testImplementation 'org.assertj:assertj-core:3.16.1'
-  testImplementation 'org.mockito:mockito-core:3.3.3'
+  testImplementation 'junit:junit:4.13.2'
+  testImplementation 'org.assertj:assertj-core:3.23.1'
+  testImplementation 'org.mockito:mockito-core:4.6.1'
 
 
-  annotationProcessor 'com.google.dagger:dagger-compiler:2.28.1'
+  annotationProcessor 'com.google.dagger:dagger-compiler:2.42'
   annotationProcessor 'org.immutables:value:2.8.8'
 }
 

@@ -66,7 +66,7 @@ public class BatchRpcFillerService {
     }
   }
 
-  private void generateTransaction() throws Exception{
+  private void generateTransaction() throws Exception {
     final ActionableAccount account = RandomUtils.pickRandom(accounts);
     final String transaction;
     switch (transactionTypeSelector.next()) {

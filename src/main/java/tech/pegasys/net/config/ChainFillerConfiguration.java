@@ -8,6 +8,8 @@ import org.immutables.value.Value;
 public interface ChainFillerConfiguration {
   FillerMode fillerMode();
 
+  long chaindId();
+
   int numThreads();
 
   int repeatEveryNSeconds();

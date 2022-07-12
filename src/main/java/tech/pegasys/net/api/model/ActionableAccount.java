@@ -40,7 +40,7 @@ public class ActionableAccount {
                   .send()
                   .getTransactionCount()
                   .longValue());
-      //this.gasPrice = web3.ethGasPrice().send().getGasPrice();
+      // this.gasPrice = web3.ethGasPrice().send().getGasPrice();
       this.gasPrice = BigInteger.valueOf(1500000000);
     } catch (Exception e) {
       Logger.error(e, "error setting account parameters (nonce, gasPrice)");
@@ -66,13 +66,13 @@ public class ActionableAccount {
     }
   }
 
-  public AtomicLong getNonce() throws Exception{
+  public AtomicLong getNonce() throws Exception {
     return updated().nonce;
     /*return new AtomicLong(web3.ethGetTransactionCount(
-            credentials.getAddress(), DefaultBlockParameterName.LATEST)
-            .send()
-            .getTransactionCount()
-            .longValue());*/
+    credentials.getAddress(), DefaultBlockParameterName.LATEST)
+    .send()
+    .getTransactionCount()
+    .longValue());*/
   }
 
   public BigInteger getGasPrice() {
@@ -90,5 +90,4 @@ public class ActionableAccount {
   public RpcClientService getRpcClient() {
     return rpcClient;
   }
-
 }
